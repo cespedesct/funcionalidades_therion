@@ -850,23 +850,10 @@ as
     -- =============================
 				+case when 1=2 then '' else 
               '<br>'
-				          +'<span style="vertical-align:middle;display:inline-block;width:13vw;word-break:break-all;color:#DC7633;font-size:0.65vw;padding-left:0px;border:solid 1px transparent" '
-				               +isnull((select top 1 ' href="mailto:'+rtrim(ltrim(isnull(ta.email, '')))+'?Subject=Encargo_'+@numinfor+'">'+rtrim(ta.desusuar)+''
-									                   from CORITEL.dbo.th_gestores_responsables g(nolock)
-									                   left outer join CORITEL.dbo.taousuar ta (nolock) on ta.codusuar=g.usuario
-									                   where g.codentid=@codentid
-                           )
-                    ,isnull((select top 1 ' href="mailto:'+rtrim(ltrim(isnull(ta.email, '')))+'?Subject=Encargo_'+@numinfor+'">'+rtrim(ta.desusuar)+''
-							                      from CORITEL.dbo.vTaoencar t
-								                     left outer join TASACIONES.dbo.th_provincia_1 thp (nolock) on   t.codprovi=thp.codigo_provincia
-								                     left outer join CORITEL.dbo.th_gradm            g (nolock) on thp.codigo_area_administrativa=g.codgradm
-								                     left outer join CORITEL.dbo.taousuar           ta (nolock) on   g.codusuar=ta.codusuar
-							                      where t.numinfor=@numinfor 
-                               and ta.tipusuar='P' 
-                               and anulado='0'
-                             )
-                    , '>Sin Gestor'))
-				         +' (gestor)</span>'
+			  +'<span style="vertical-align:middle;display:inline-block;width:13vw;word-break:break-all;color:#DC7633;font-size:0.65vw;padding-left:0px;border:solid 1px transparent"> '
+		      +isnull( (select u.descripcion from CORITEL.dbo.th_gestor_encargo ge inner join usuarios u on ge.codusuar = u.cod_usuario_TH where ge.numinfor = @numinfor)
+              ,'Sin gestor asignado')     
+			  +' </span>'
 				 end
 				 +case when 1=2 then '' else 
           ---------------------------------------------------------
