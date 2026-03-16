@@ -1,7 +1,13 @@
+USE [ETHER]
+GO
+
+/****** Object:  UserDefinedFunction [dbo].[Unidad_Informacion_Informe_Identificacion]    Script Date: 16/03/2026 11:11:08 ******/
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 -- select * from TH_Informes (nolock) where numinfor in ('26004262','26004261','26004260','26004259')
 -- select dbo.Unidad_Informacion_Informe_Identificacion (1109988, 1, 0, '200`x')
@@ -312,14 +318,16 @@ as
           ---------------------------------------
           declare @bloqueado bit
                  ,@asignable bit
-                 ,@usuario_coritel bit
+                 ,@usuario_TH bit
+                 ,@usuario_gestor_encargado bit
 
           if @estinfor in ('0')
              begin
                 set @bloqueado=0; if exists (select * from CORITEL.dbo.taoencar_clasificacion cl (nolock) where cl.numinfor=@numinfor and cl.codclasif='0027' and isnull(cl.anulado,0)=0) set @bloqueado=1
                 set @asignable=0; if exists (select * from CORITEL.dbo.taoencar_clasificacion cl (nolock) where cl.numinfor=@numinfor and cl.codclasif='0028' and isnull(cl.anulado,0)=0) set @asignable=1
-                set @usuario_coritel=0; if exists (select * from ETHER.dbo.usuarios u (nolock) inner join CORITEL.dbo.taousuar (nolock) tu on u.cod_usuario_TH = tu.codusuar where u.codigo = @usuario ) set @usuario_coritel=1
-
+                set @usuario_TH=0; if exists (select * from ETHER.dbo.usuarios u (nolock) inner join CORITEL.dbo.taousuar (nolock) tu on u.cod_usuario_TH = tu.codusuar where u.codigo = @usuario ) set @usuario_TH=1
+                set @usuario_gestor_encargado=0; if exists (select * from ETHER.dbo.usuarios u (nolock) inner join CORITEL.dbo.taousuar (nolock) tu on u.cod_usuario_TH = tu.codusuar 
+                    inner join CORITEL.dbo.th_gestor_encargo (nolock) ge on ge.numinfor = @numinfor and ge.codusuar = tu.codusuar where u.codigo = @usuario ) set @usuario_gestor_encargado =1
              end
 
           set @color_limite_entrega='#AAAAAA'
@@ -615,7 +623,24 @@ as
      -- Acciones en el estinfor='0' -> Asignable y bloqueo por gestión
      -- ---------------------------------------------------------------
      +case when @estinfor='0' then
-                case when @bloqueado is null then ''
+                  case when @usuario_TH = 0 then ''
+                      when @usuario_gestor_encargado = 1 then 
+                      '<img class="aumenta click imginforme" style="padding-left:0.5vw;;vertical-align:middle" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAulJREFUSImtlU9oXFUUxn/ffe/N2D+6sAELNYqKaBZFQ11YhFZbBV3ITN4zoLgQJFTagkVwLXEhVnAhWc7SNmD7khdtFkWp0GZRLN0IpUWQFgWlaiwuDOnMvDf3uLAT3iTtpBM9q3vO/c73nfPeufeKktnkpMsvXZrA+yM4d/PfoBnwl0nvVWdnLzOgqey0x8Y+Q3pLUIuybKEbbybJ487seJTnL2h+fnkQgbC7aNVqO016EmkCs09aSXKutxRViih6BlhYTXJXAgrDfYLz3vtRpCUHZ7p73vvnkS6EQXBxEPIeATPbBuyW9EU0NPShGo18pbs43ibpIaXpzQ0LALhOZ8qH4cP54uJBYKqdJEcwk8H1QYlXOEuLTicIQsxG5Ny9t9oaNrMHZFY174uNCKx04OFHYLSSZYe7sUqWvQ/QjuMpB1//pw4qW7Z8JbOkWa8/Vga0arWdwJ5gaOibjQj0noMkGcVsxuAY0hXMngLeJgj2V9P0ykYEQoA8jvcYvCbYbnCfkzzeP4K0ZFCR95PtOP5Tzn0ZzcwM1IlaY2NvIr3hzD7qOPd7IG037z/F7CpSgtTsyTD7Ccn34QwEJ6LZ2aMAoaR3V10B1+zAgb354uL3wOXoxo3dOnu2Z4JsfPz+oih2hc3mgk6fbpX32vX60+bcyqA4wK2+X9Ro5EjLwJrRtPHxIPf+W3MuLjZtml7vE7n1AGus2axiFsr7aYPh/11A8/PLBh8YTOD9ofXw4XqA21k1y+aAubvBDizQrtd3SXqx6+fS9OYs++VO+MH/QRC8g1R4uGbODYfSq/3ggwuYjYRF0ajOzaWSTuD9E/3gocGOVpIcXctjDzpYe6CkrTp16m+AUPqhDSP9BNSO42clbb1DtYdNGi75EfBHJcte6oZacXxd0q+lrEBmJ6Ms+xggrGTZd30KOFN28jh+zuD1ngrhauTcy0rTpdt20Ie8x26Rfy64x6TyC/co8HPk3CtK099W5/0Da84hp86BnKAAAAAASUVORK5CYII=" '
+                             +' title="DESOCUPAR encargo. Pulsar Click para desocupar encargo" '
+				                         +' onclick=" var  p='''';'
+				                         +' p+=''{confirmacion|OCUPACIÓN de Encargo '+@numinfor+'|||'';'
+				                         +' var e=''WSQL(··TH_Informes_Asignar_Gestor ·'+@numinfor+'·,'+ltrim(str(@usuario))+' ··)''; '
+				                         +' Pide_Parametros(p,e);'
+				                         +'">'
+                      else '<img class="aumenta click imginforme" style="padding-left:0.5vw;;vertical-align:middle" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAvpJREFUSImtlVFom2UUhp/z/f/SiXXgeuFAqzAR7UWZpUXadMQkKuqgDExTFC8EKQwdOIRdy7wQJ3gh9Uov1YJLE6rsQpQ1zYpJKip4syHIxgTHVIqC29qma77XC01Msiwx1XP1f+e8//ueczjn+4wGO6ET7mx5eBZ0DGzjL68k6XeTvbp8cPocPZo1HpKl7DuCF0x2OD+ZWqn5Y6vZBwJvH/VHIonTY1PrvQiEdZJSZljwEGJWTm8ly7mzdZRAKHK9sjUGrLQj6irgcEmgZDAicc0bZ+oxrzhmX21Y9eteyJsEDBsATXizj69G1l7/duzIjVosXs4NmHRvOTqzsWMBALPqnCm4b09l4CVgLl7KHnOYebjSK3HNXO1DRrWqMJRpSI47AJxp0KO7TL4PY3snAv+0SPxgMLI8kT5a8+Un0scBEsWFOWSf/6cKdt1+/VNQKllcvL8RECtlhnEW+6Nv7YudCDTtQayUHQkga9KHcnYebwcwveicf2xpfOb8jgWSxVxM+GnM7UMkML0rqWLmHOg42BLSmqFP8pPpniqxeHnheRPPOekN88EvPvD7PO5tZ7ogkQLbbM5Il4T5W1MqMDiVj06fBAhN7pWWK+Di6DfvPbpna+A74JwqeycKiUTTBD1ZyuzdduFo5LfdK58dOlRpjMWLmYeNoD4oDuRa75e/l2y93WimM5lgC7dU9f6ZzTvX57u1yHUDtNrm/tv6gBDn55EN/u8Cp8em1g17zbybxVVf7oYPuwHaWT6aWgQW/w22Z4HEamZUVXu87gjcfGE89dOt8D23CLkj4LadcdHMBp001Qneu4C3oRsK389H0wvO6xTiwU7wELg7Wc6dvClR6R6kmxfK1F+cPHwVYMvr+9DZUCcBi3+ZGyegv13QSUdF4yhqF/DrcnT6iZonUcpeAbvcgAnAMsvR1JsAYeFgarVDAmcaD4lyblLSsy2YC6pUnyokZq61raADeZMlyrlJpA9Au8E1vnD7QT8q9E8XHpn5ufW/PwGXKC8iwO0Z8AAAAABJRU5ErkJggg=="'
+                             +' title="OCUPAR encargo. Pulsar Click para ocupar encargo" '
+				                         +' onclick=" var  p='''';'
+				                         +' p+=''{confirmacion|OCUPACIÓN de Encargo '+@numinfor+'|||'';'
+				                         +' var e=''WSQL(··TH_Informes_Asignar_Gestor ·'+@numinfor+'·,'+ltrim(str(@usuario))+' ··)''; '
+				                         +' Pide_Parametros(p,e);'
+				                         +'">'
+                 end
+                +case when @bloqueado is null then ''
                      when @bloqueado=1 then 
                       '<img class="aumenta click imginforme" src="img\ico_informebloqueado.png" '
                      +' title="Informe Bloqueado por Gestión. Pulsar Click para Liberar" '
@@ -654,24 +679,12 @@ as
 				                         +'">'
                      else ''
                 end
-                 +case when @usuario_coritel is null then ''
-                     when @usuario_coritel=0       then '' 
-                     when @usuario_coritel=1 then 
-                          '<img class="aumenta click imginforme" style="padding-left:0.5vw;;vertical-align:middle" src="img\ico_informeasignable.png" '
-                             +' title="OCUPAR encargo. Pulsar Click para OCUPAR Encargo" '
-				                         +' onclick=" var  p='''';'
-				                         +' p+=''{confirmacion|OCUPACIÓN de Encargo '+@numinfor+'|||'';'
-				                         +' var e=''WSQL(··TH_Informes_Asignar_Gestor ·'+@numinfor+'· ··)''; '
-				                         +' Pide_Parametros(p,e);'
-				                         +'">'
-                
-                end
            else ''
       end
 		   -- ==============================
      -- ======= Asignacion ===========
      -- ==============================
-     +case when (@estinfor in ('0') and @bloqueado=0 and @asignable=1) or (@estinfor in ('3')) then
+     +case when ((@estinfor in ('0') and @bloqueado=0 and @asignable=1) or (@estinfor in ('3'))) and @usuario_gestor_encargado=1 then
             '<img class="aumenta click imginforme" style="padding-left:0.5vw;;" src="img\ico_asignaciontasador.png" '
            +' title="Asignación de Tasador al Informe"'
            +' onclick="Pide_Parametros( '''
@@ -866,7 +879,7 @@ as
 				+case when 1=2 then '' else 
               '<br>'
 			  +'<span style="vertical-align:middle;display:inline-block;width:13vw;word-break:break-all;color:#DC7633;font-size:0.65vw;padding-left:0px;border:solid 1px transparent"> '
-		      +isnull( (select u.descripcion from CORITEL.dbo.th_gestor_encargo ge inner join usuarios u on ge.codusuar = u.cod_usuario_TH where ge.numinfor = @numinfor)
+		      +isnull( (select u.descripcion from CORITEL.dbo.th_gestor_encargo (nolock) ge inner join usuarios (nolock) u on ge.codusuar = u.cod_usuario_TH where ge.numinfor = @numinfor)
               ,'Sin gestor asignado')     
 			  +' </span>'
 				 end
@@ -1189,3 +1202,5 @@ return isnull(@r, 'null')
 end
 
 GO
+
+
