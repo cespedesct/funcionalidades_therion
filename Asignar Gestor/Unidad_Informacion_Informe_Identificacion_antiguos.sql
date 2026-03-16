@@ -312,11 +312,14 @@ as
           ---------------------------------------
           declare @bloqueado bit
                  ,@asignable bit
+                 ,@usuario_coritel bit
 
           if @estinfor in ('0')
              begin
                 set @bloqueado=0; if exists (select * from CORITEL.dbo.taoencar_clasificacion cl (nolock) where cl.numinfor=@numinfor and cl.codclasif='0027' and isnull(cl.anulado,0)=0) set @bloqueado=1
                 set @asignable=0; if exists (select * from CORITEL.dbo.taoencar_clasificacion cl (nolock) where cl.numinfor=@numinfor and cl.codclasif='0028' and isnull(cl.anulado,0)=0) set @asignable=1
+                set @usuario_coritel=0; if exists (select * from ETHER.dbo.usuarios u (nolock) inner join CORITEL.dbo.taousuar (nolock) tu on u.cod_usuario_TH = tu.codusuar where u.codigo = @usuario ) set @usuario_coritel=1
+
              end
 
           set @color_limite_entrega='#AAAAAA'
@@ -650,6 +653,18 @@ as
 				                         +' Pide_Parametros(p,e);'
 				                         +'">'
                      else ''
+                end
+                 +case when @usuario_coritel is null then ''
+                     when @usuario_coritel=0       then '' 
+                     when @usuario_coritel=1 then 
+                          '<img class="aumenta click imginforme" style="padding-left:0.5vw;;vertical-align:middle" src="img\ico_informeasignable.png" '
+                             +' title="OCUPAR encargo. Pulsar Click para OCUPAR Encargo" '
+				                         +' onclick=" var  p='''';'
+				                         +' p+=''{confirmacion|OCUPACIÓN de Encargo '+@numinfor+'|||'';'
+				                         +' var e=''WSQL(··TH_Informes_Asignar_Gestor ·'+@numinfor+'· ··)''; '
+				                         +' Pide_Parametros(p,e);'
+				                         +'">'
+                
                 end
            else ''
       end
