@@ -1,7 +1,13 @@
+USE [ETHER]
+GO
+
+/****** Object:  StoredProcedure [dbo].[TH_Clientes_Acceso_Externo_Solicitar_Presupuesto]    Script Date: 27/04/2026 12:43:55 ******/
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 -- https://app.tasacioneshipotecarias.com/ether/FRTHERION_EXT.aspx?peticion=AgAAAPZBpajgsF9HhQzFoGj/JIbRSae4hWOApSFDlcHidx+mbW2WitsSn4kPe7zMV6NXv4PlUYOiRtALhPan4bc+4KtsXP0y+Eh9Ecvrdjgs0j+hh3xIpPRBdOf/xQsTpI+hEA==
 -- print dbo.f_Parametro_SISTEMA('urlexternas')+dbo.THERION_EnCriptar_Cadena_con_Clave  ('TH_Clientes_Acceso_Externo_Solicitar_Presupuesto @fk_usuario=1','19271812')
@@ -128,7 +134,7 @@ begin try
 
      declare @favicon varchar(max)='img/faviconth.png'
      set @html+=
-          +'<script type="text/javascript">'
+      +'<script type="text/javascript">'
       +'   // ---------------------
            // -- Cambiar Favicon
            // ---------------------
@@ -142,33 +148,6 @@ begin try
            link.href="'+@favicon+'";
            document.title = "Presupuesto";
           }'+char(10)
-      +'</script>'
-      set @html+=  
-       +'<script type="text/javascript">'
-      +'// --- Normalización de nombres de archivos ---'+char(10)
-      +'function normalizeFileName(fileName) {'+char(10)
-      +'    return fileName'+char(10)
-      +'        .replace(/Ñ/g, "N")'+char(10)
-      +'        .replace(/ñ/g, "n")'+char(10)
-      +'        .replace(/#/g, "_")'+char(10)
-      +'        .normalize("NFD")'+char(10)
-      +'        .replace(/[\u0300-\u036f]/g, "")'+char(10)
-      +'        .replace(/[^a-zA-Z0-9._-]/g, "_");'+char(10)
-      +'}'+char(10)
-
-        +'function Subeficheros_Normaliza(input, panel) {'+char(10)
-        +'    if (input.files && input.files.length > 0) {'+char(10)
-        +'        var file = input.files[0];'+char(10)
-        +'        var normalized = normalizeFileName(file.name);'+char(10)
-        +'        if (file.name !== normalized) {'+char(10)
-        +'            var dataTransfer = new DataTransfer();'+char(10)
-        +'            var newFile = new File([file], normalized, { type: file.type });'+char(10)
-        +'            dataTransfer.items.add(newFile);'+char(10)
-        +'            input.files = dataTransfer.files;'+char(10)
-        +'        }'+char(10)
-        +'    }'+char(10)
-        +'    Subeficheros(input, panel);'+char(10)
-        +'}'+char(10)
       +'</script>'
       
      set @html+=
@@ -188,10 +167,10 @@ begin try
           +' div.saltopag    {display:block;page-break-before:always;}'
           +' td.etiqueta, td.datoencargo, td.aportacion, td.datoimporte {font-family:"Open Sans","Helvetica Neue",helvetica,arial,sans-serif;color:black;font-size:0.8vw;padding-right:0.5vw;text-align:left;vertical-align:middle;border-bottom:solid 1px transparent;border-right:solid 4px #92575b}'
           +' td.etiqueta     {width:13% ;padding-right:0.5vw;text-align:right;border-bottom:solid 1px transparent;border-right:solid 4px #92575b}'
-                +' td.datoencargo  {width:100%;padding-left :0.5vw;border:solid 1px transparent}'
+		        +' td.datoencargo  {width:100%;padding-left :0.5vw;border:solid 1px transparent}'
                 +' td.datoimporte  {width:100%;padding-left :0.5vw;border:solid 1px transparent; display:flex; flex-direction:row}'
-                +' td.aportacion   {width:40% ;font-size:0.75vw;font-weight:bold;padding-left:0.5vwborder:solid 1px transparent;border-left:solid 0px #92575b}'
-                +' td.resto        {width:auto;font-size:0.75vw;font-weight:bold;padding-left:0.5vwborder:solid 1px transparent;border-left:solid 0px #92575b}
+		        +' td.aportacion   {width:40% ;font-size:0.75vw;font-weight:bold;padding-left:0.5vwborder:solid 1px transparent;border-left:solid 0px #92575b}'
+		        +' td.resto        {width:auto;font-size:0.75vw;font-weight:bold;padding-left:0.5vwborder:solid 1px transparent;border-left:solid 0px #92575b}
              #outerContainer #mainContainer div.toolbar {display: none !important;}
              #outerContainer #mainContainer #viewerContainer {top: 0 !important;}                              
            '
@@ -728,13 +707,13 @@ begin try
 
        -- select * from CORITEL.dbo.taoobjet where codclase='800'
 
-       declare @lista_tipo_inmueble varchar(max)=
-                     '<option value="0" >--</option>'
-                    +'<option value="80008">Vivienda-Piso</option>'
-                    +'<option value="80012">Vivienda Unifamiliar</option>'
-                    +'<option value="80006">Plaza de Garaje</option>'
-                    +'<option value="80007">Trastero</option>'
-                    +'<option value="80009">Local Comercial</option>'
+   	   declare @lista_tipo_inmueble varchar(max)=
+		             '<option value="0" >--</option>'
+		            +'<option value="80008">Vivienda-Piso</option>'
+		            +'<option value="80012">Vivienda Unifamiliar</option>'
+		            +'<option value="80006">Plaza de Garaje</option>'
+		            +'<option value="80007">Trastero</option>'
+		            +'<option value="80009">Local Comercial</option>'
               +'<option value="80013">Oficina</option>'
               +'<option value="80014">Nave Industrial</option>'
               +'<option value="80010">Edificio</option>'
@@ -743,16 +722,16 @@ begin try
               +'<option value="90001">Terrenos</option>'
 
        ------------------------------------
-       declare @lista_finalidad varchar(max)=
-                     '<option value="0" >--</option>'
-                    +'<option value="HI">Préstamo Hipotecario</option>'
-                    +'<option value="ME">Valor de Mercado</option>'
+   	   declare @lista_finalidad varchar(max)=
+		             '<option value="0" >--</option>'
+		            +'<option value="HI">Préstamo Hipotecario</option>'
+		            +'<option value="ME">Valor de Mercado</option>'
        
        
 
 --       set @html+=
 --               +'<tr><td class="etiqueta"></td><td class="datoencargo"><p class="separatasec"></p></td></tr>'        
-          
+	      
        
 --       set @html+=
 --               +'<tr style="height:2vh">
@@ -846,10 +825,10 @@ begin try
        --------------------------
        -- Datos del Solicitante
        --------------------------
-          set @html+=
+	      set @html+=
        +'<tr style="height:auto">
              <td class="datoencargo">'
-                          +'<p class="separatacam"></p>'
+				          +'<p class="separatacam"></p>'
               +'<section id="sectionpersonafisica">'
                  +'<a class="etiqueta etipri">Nombre:</a><input id="nombresolicitante"    class="datoentrada" type="text" value="" maxlength="40" style="display:inline-block;width:25vw;"/>' 
                  +'<p class="separatacam"></p>'
@@ -901,10 +880,10 @@ begin try
        --------------
        set @html+=
        +'<tr><td class="eticomp_2" style="padding-left:2vw;"><u>Persona de Contacto para la visita</u></td></tr>'+char(10)
-          set @html+=
+	      set @html+=
        +'<tr style="height:auto">
              <td class="datoencargo">'
-                          +'<a class="etiqueta etipri">Nombre:  </a><input id="nombrecontacto" class="datoentrada" type="text" value="" maxlength="40" style="width:25vw;"/>' 
+				          +'<a class="etiqueta etipri">Nombre:  </a><input id="nombrecontacto" class="datoentrada" type="text" value="" maxlength="40" style="width:25vw;"/>' 
               +'<p class="separatacam"></p>'
               +'<a class="etiqueta etipri">Teléfono: </a><input id="telefonocontacto" class="datoentrada" type="text" value="" maxlength="12" style="width:10vw;"/>' 
               +'<p class="separatacam"></p>'
@@ -1005,10 +984,10 @@ begin try
        -- Datos del Solicitante de Facturación
        ---------------------------------------------
 
-          set @html+=
+	      set @html+=
        +'<tr id="trsolicitante_fac" style="height:auto;display:none">
              <td class="datoencargo">'
-                          +'<p class="separatacam"></p>'
+				          +'<p class="separatacam"></p>'
               +'<section id="sectionpersonafisica_fac">'
                  +'<a class="etiqueta etipri">Nombre:   </a><input id="nombresolicitante_fac"    class="datoentrada" type="text" value="" maxlength="40" style="display:inline-block;width:25vw;"/>' 
                  +'<p class="separatacam"></p>'
@@ -1071,7 +1050,7 @@ begin try
        set @html+=
        +'<tr style="height:2vh">
            <td class="datoencargo">'
-                    +'<a class="etiqueta etipri">Tipo de inmueble:</a><select id="tipoinmueble" class="datoentrada" onchange="'+@calculo_tarifa+'" style ="display:inline-block;width:25.3vw;height:2.7vh">'+isnull(@lista_tipo_inmueble,'')+'</select>' 
+            		+'<a class="etiqueta etipri">Tipo de inmueble:</a><select id="tipoinmueble" class="datoentrada" onchange="'+@calculo_tarifa+'" style ="display:inline-block;width:25.3vw;height:2.7vh">'+isnull(@lista_tipo_inmueble,'')+'</select>' 
               +'<p class="separatacam"></p>'
               +'<a class="etiqueta etipri">Dirección:</a><input id="calle" class="datoentrada" type="text" value="" maxlength="60" style="display:inline-block;width:25vw;"/>' 
               +'<a class="etiqueta " style="display:inline-block;width:2.5vw;" >Núm.:</a><input id="numerocalle" class="datoentrada"  type="text" value="" maxlength="10" style="display:inline-block;width:4vw;"/>' 
@@ -1190,11 +1169,11 @@ begin try
        -----------------------------------
        -- Contacto de gestion (Datos)
        -----------------------------------
-          set @html+=
+	      set @html+=
        +'<tr style="height:auto;display:'+@ver_publico+'">
              <td class="datoencargo">'
               +'<section id="sectionotrocontactogestion" style="display:none">'
-                          +'<p class="separatacam"></p>'
+				          +'<p class="separatacam"></p>'
                  +'<a class="etiqueta etipri">Nombre:   </a><input id="nombrecontactogestion" class="datoentrada" type="text" value="" maxlength="40" style="display:inline-block;width:25vw;"/>' 
                  +'<p class="separatacam"></p>'
                  +'<a class="etiqueta etipri">Apellidos:</a><input id="apellidoscontactogestion" class="datoentrada" type="text" value="" maxlength="60" style="display:inline-block;width:25vw;"/>' 
@@ -1222,7 +1201,7 @@ begin try
              ------------------------
              -- Dni del Solicitante
              ------------------------
-                                           +'<div style="'+@css_div_ficheros+'" >' 
+										   +'<div style="'+@css_div_ficheros+'" >' 
                   +'<a class="etiqueta">Doc. DNI/Pasaporte Solicitante</a><br>'
                   +'<input type="file" '
                         +' id="fichero_dni"'
@@ -1233,7 +1212,7 @@ begin try
                         +' tabla_asociada="TH_Presupuestos_WEB_'+@semilla_ficheros+'" '
                         +' codigo_tabla_asociada="1" '
                         +' title="Seleccione el fichero correspondiente al DNI/Pasaporte" '         -- CAMPO FICHERO siendo GUID el identificador a grabar en tabla_asociada
-                                          +' onchange="Subeficheros_Normaliza(this, document.getElementById(''PGFiles'') );" '  -- EVENTO PARA SUBIR SIENDO primer paramámetro THIS O EL CAMPO FICHERO Y SEGUNDO PARAMETRO EL DIV DONDE SE VAN A MOSTRAR LAS EVOLUCIONES
+									               +' onchange="Subeficheros(this, document.getElementById(''PGFiles'') );" '  -- EVENTO PARA SUBIR SIENDO primer paramámetro THIS O EL CAMPO FICHERO Y SEGUNDO PARAMETRO EL DIV DONDE SE VAN A MOSTRAR LAS EVOLUCIONES
                                                                                                     -- Genera un registro -> select f.fileName, f.tabla_asociada, f.codigo_tabla_asociada from SISTEMA_ficheros f (nolock) where f.tabla_asociada='TH_Tasadores_'+@semilla_ficheros+'' and codigo_tabla_asociada=@fk_TH_Tasadores
                   +'/><br>' 
                   +'<div id="PGFiles_dni" style="'+@css_pg_ficheros+'"></div>'  -- DIV DONDE VAN LOS NOMBRES DE FICHEROS Y LA PROGRESS BAR
@@ -1241,7 +1220,7 @@ begin try
              ------------------------
              -- Nota Simple
              ------------------------
-                                            +'<div style="'+@css_div_ficheros+'" >' 
+										    +'<div style="'+@css_div_ficheros+'" >' 
                      +'<a class="etiqueta">Nota Simple(*)</a><br>'
                      +'<input type ="file"'
                            +' id   ="fichero_notasimple"'
@@ -1252,7 +1231,7 @@ begin try
                            +' tabla_asociada       ="TH_Presupuestos_WEB_notasimple_'+@semilla_ficheros+'" '
                            +' codigo_tabla_asociada="1" '
                            +' title="Seleccione el fichero correspondiente a la Nota Simple" '                    -- CAMPO FICHERO siendo GUID el identificador a grabar en tabla_asociada
-                                             +' onchange="Subeficheros_Normaliza(this, document.getElementById(''PGFiles_notasimple'') );" '  -- EVENTO PARA SUBIR SIENDO primer paramámetro THIS O EL CAMPO FICHERO Y SEGUNDO PARAMETRO EL DIV DONDE SE VAN A MOSTRAR LAS EVOLUCIONES
+									                  +' onchange="Subeficheros(this, document.getElementById(''PGFiles_notasimple'') );" '  -- EVENTO PARA SUBIR SIENDO primer paramámetro THIS O EL CAMPO FICHERO Y SEGUNDO PARAMETRO EL DIV DONDE SE VAN A MOSTRAR LAS EVOLUCIONES
                                                                                                                    -- Genera un registro -> select f.fileName, f.tabla_asociada, f.codigo_tabla_asociada from SISTEMA_ficheros f (nolock) where f.tabla_asociada='TH_Tasadores_'+@semilla_ficheros+'' and codigo_tabla_asociada=@fk_TH_Tasadores
                            +'/><br>' 
                      +'<div id="PGFiles_notasimple" style="'+@css_pg_ficheros+'"></div>'  -- DIV DONDE VAN LOS NOMBRES DE FICHEROS Y LA PROGRESS BAR
@@ -1260,7 +1239,7 @@ begin try
              -----------------------------------
              -- Justificante de Autorización
              -----------------------------------
-                                            +'<div style="'+@css_div_ficheros+'" >' 
+										    +'<div style="'+@css_div_ficheros+'" >' 
                  +'<section id="sectionotrocontactogestionfichero">'
                      +'<a class="etiqueta">Justificante de Autorización</a><br>'
                      +'<input type ="file"'
@@ -1272,7 +1251,7 @@ begin try
                            +' tabla_asociada       ="TH_Presupuestos_WEB_justificante_'+@semilla_ficheros+'" '
                            +' codigo_tabla_asociada="1" '
                            +' title="Seleccione el fichero correspondiente al Justificante de Autorización" '       -- CAMPO FICHERO siendo GUID el identificador a grabar en tabla_asociada
-                                             +' onchange="Subeficheros_Normaliza(this, document.getElementById(''PGFiles_justificante'') );" '  -- EVENTO PARA SUBIR SIENDO primer paramámetro THIS O EL CAMPO FICHERO Y SEGUNDO PARAMETRO EL DIV DONDE SE VAN A MOSTRAR LAS EVOLUCIONES
+									                  +' onchange="Subeficheros(this, document.getElementById(''PGFiles_justificante'') );" '  -- EVENTO PARA SUBIR SIENDO primer paramámetro THIS O EL CAMPO FICHERO Y SEGUNDO PARAMETRO EL DIV DONDE SE VAN A MOSTRAR LAS EVOLUCIONES
                                                                                                                     -- Genera un registro -> select f.fileName, f.tabla_asociada, f.codigo_tabla_asociada from SISTEMA_ficheros f (nolock) where f.tabla_asociada='TH_Tasadores_'+@semilla_ficheros+'' and codigo_tabla_asociada=@fk_TH_Tasadores
                            +'/><br>' 
                      +'<div id="PGFiles_justificante" style="'+@css_pg_ficheros+'"></div>'  -- DIV DONDE VAN LOS NOMBRES DE FICHEROS Y LA PROGRESS BAR
@@ -1281,7 +1260,7 @@ begin try
              -----------------------------------
              -- Fichero Otros
              -----------------------------------
-                                            +'<div style="'+@css_div_ficheros+'" >' 
+										    +'<div style="'+@css_div_ficheros+'" >' 
                  +'<section id="sectionotrosficheros">'
                      +'<a class="etiqueta">Otros Ficheros</a><br>'
                      +'<input type ="file"'
@@ -1293,7 +1272,7 @@ begin try
                            +' tabla_asociada       ="TH_Presupuestos_WEB_otrosficheros_'+@semilla_ficheros+'" '
                            +' codigo_tabla_asociada="1" '
                            +' title="Seleccione el fichero correspondiente a Otros Ficheros" '                      -- CAMPO FICHERO siendo GUID el identificador a grabar en tabla_asociada
-                                             +' onchange="Subeficheros_Normaliza(this, document.getElementById(''PGFiles_otrosficheros'') );" ' -- EVENTO PARA SUBIR SIENDO primer paramámetro THIS O EL CAMPO FICHERO Y SEGUNDO PARAMETRO EL DIV DONDE SE VAN A MOSTRAR LAS EVOLUCIONES
+									                  +' onchange="Subeficheros(this, document.getElementById(''PGFiles_otrosficheros'') );" ' -- EVENTO PARA SUBIR SIENDO primer paramámetro THIS O EL CAMPO FICHERO Y SEGUNDO PARAMETRO EL DIV DONDE SE VAN A MOSTRAR LAS EVOLUCIONES
                                                                                                                     -- Genera un registro -> select f.fileName, f.tabla_asociada, f.codigo_tabla_asociada from SISTEMA_ficheros f (nolock) where f.tabla_asociada='TH_Tasadores_'+@semilla_ficheros+'' and codigo_tabla_asociada=@fk_TH_Tasadores
                            +'/><br>' 
                      +'<div id="PGFiles_otrosficheros" style="'+@css_pg_ficheros+'"></div>'  -- DIV DONDE VAN LOS NOMBRES DE FICHEROS Y LA PROGRESS BAR
@@ -1302,7 +1281,7 @@ begin try
              -----------------------------------
              -- Justificante de Transferencia
              -----------------------------------
-                                            +'<div style="'+@css_div_ficheros+';width:22vw;" >' 
+										    +'<div style="'+@css_div_ficheros+';width:22vw;" >' 
                  +'<section id="sectiontransferencia">'
                      +'<a class="etiqueta">Justificante de Transferencia</a><br>'
                      +'<input type ="file"'
@@ -1314,7 +1293,7 @@ begin try
                            +' tabla_asociada       ="TH_Presupuestos_WEB_transferencia_'+@semilla_ficheros+'" '
                            +' codigo_tabla_asociada="1" '
                            +' title="Seleccione el fichero correspondiente al Justificante de Transferencia" '       -- CAMPO FICHERO siendo GUID el identificador a grabar en tabla_asociada
-                                             +' onchange="Subeficheros_Normaliza(this, document.getElementById(''PGFiles_transferencia''));" '   -- EVENTO PARA SUBIR SIENDO primer paramámetro THIS O EL CAMPO FICHERO Y SEGUNDO PARAMETRO EL DIV DONDE SE VAN A MOSTRAR LAS EVOLUCIONES
+									                  +' onchange="Subeficheros(this, document.getElementById(''PGFiles_transferencia''));" '   -- EVENTO PARA SUBIR SIENDO primer paramámetro THIS O EL CAMPO FICHERO Y SEGUNDO PARAMETRO EL DIV DONDE SE VAN A MOSTRAR LAS EVOLUCIONES
                                                                                                                      -- Genera un registro -> select f.fileName, f.tabla_asociada, f.codigo_tabla_asociada from SISTEMA_ficheros f (nolock) where f.tabla_asociada='TH_Tasadores_'+@semilla_ficheros+'' and codigo_tabla_asociada=@fk_TH_Tasadores
                            +'/><br>' 
                      +'<div id="PGFiles_transferencia" style="'+@css_pg_ficheros+';width:21.5vw;"></div>' -- DIV DONDE VAN LOS NOMBRES DE FICHEROS Y LA PROGRESS BAR
@@ -1325,7 +1304,7 @@ begin try
        -----------------------------------
        -- Importe Manual (Datos)
        -----------------------------------
-          set @html+=
+	      set @html+=
        +'<tr style="height:auto;display:'+@ver_publico+'">
              <td class="datoimporte" style="text-align:left;padding-left:0px">'
               +'<div id="sectionimportemanual" style="display:inline-block;width:53vw;border:solid 1px transparent;vertical-align:bottom;padding:0px>'
@@ -1377,7 +1356,7 @@ begin try
                        <br>
                    </td>
               </tr>'+char(10)
-              set @html+=
+  	          set @html+=
              +'<tr id="seccionverificacion" style="height:7vh;display:;">' 
              +'    <td style="text-align:left">
                    <a class="opensans" style="text-align:justify;vertical-align:middle;font-size:0.80vw;font-weight:normal;color:red;display:inline-block;width:44vw;">
@@ -1395,7 +1374,7 @@ begin try
                    #icono_verificacion#
                    </td>'
              +'</tr>'        
-              set @html+=
+  	          set @html+=
              +'<tr id="seccionvalidacion" style="height:auto;display:none;">' 
              +'    <td style="text-align:left">
                    <div id="listavalidaciones" style="width:100%"></div> 
@@ -1403,7 +1382,7 @@ begin try
              +'</tr>'        
              set @html+=
              +'<tr><td></td><td><p class="separatasec"></p></td></tr>'      
-              set @html+=
+  	          set @html+=
              +'<tr id="secciongrabacion" style="height:7vh;display:;">' -- Este id debe ser llamado siempre secciongrabacion ya que el JSTHERION_EXT.js lo pone diplay 
              +' <td style="text-align:left">
                    <a class="etiqueta etipri" style="width:25vw">Introduzca el Código Recibido por SMS, y pulse en Icono enviar:</a>
@@ -1415,7 +1394,7 @@ begin try
        --------------------------------------------------------------------------------------------------
        if @fk_usuario is not null   -- si el usuario viene de Therion -- Usuario Interno (Comercial) -- Tasador o Externo 
           begin
-              set @html+=
+  	          set @html+=
              +'<tr id="seccionvalidacion" style="height:auto;display:none;">' 
              +'    <td style="text-align:left">
                    <div id="listavalidaciones" style="width:100%"></div> 
@@ -1438,7 +1417,7 @@ begin try
            +'</td>'
         +'</tr>'        
 
-         ----------------------------------------
+	     ----------------------------------------
       ----------------------------------------
       set @html+=
           +'</table>'+char(10)
@@ -1558,3 +1537,4 @@ end catch
 end
 
 GO
+
