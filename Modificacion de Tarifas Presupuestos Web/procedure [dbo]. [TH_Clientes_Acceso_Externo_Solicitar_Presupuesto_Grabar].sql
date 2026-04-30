@@ -137,7 +137,6 @@ begin try
              ,@regpropiedad                   varchar(300)
              ,@fincaregistral                 varchar(300)
              ,@idufir                         varchar(300)
-             ,@abririmportemanual             varchar(300)
              ,@importemanual                  varchar(300)
              ,@importetransferenciavalidado   varchar(300)
              ,@fechatransferenciavalidado     varchar(300)
@@ -188,7 +187,6 @@ begin try
       ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
       set @mismosolicitantefacturacion =(select top 1 xc.value('v[1]','varchar(300)') from @x1.nodes('/root/p') as xt(xc) where xc.value('c[1]','varchar(100)')='mismosolicitantefacturacion' )
       set @otrosolicitantefacturacion  =(select top 1 xc.value('v[1]','varchar(300)') from @x1.nodes('/root/p') as xt(xc) where xc.value('c[1]','varchar(100)')='otrosolicitantefacturacion'  )
-      set @abririmportemanual          =(select top 1 xc.value('v[1]','varchar(300)') from @x1.nodes('/root/p') as xt(xc) where xc.value('c[1]','varchar(100)')='abririmportemanual'          )
       ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------       
       set @rempresa_fac                =(select top 1 xc.value('v[1]','varchar(300)') from @x1.nodes('/root/p') as xt(xc) where xc.value('c[1]','varchar(100)')='rempresa_fac'                )
       set @rpersona_fac                =(select top 1 xc.value('v[1]','varchar(300)') from @x1.nodes('/root/p') as xt(xc) where xc.value('c[1]','varchar(100)')='rpersona_fac'                )
@@ -843,7 +841,7 @@ begin try
                  ,p.fichero_justificante      =@fichero_justificante
                  ,p.fichero_notasimple        =@fichero_notasimple
                  ,p.fichero_transferencia     =@fichero_transferencia
-                 ,p.importe_presupuesto_manual=case when isnull(@abririmportemanual,'0')='1' then @importe_presupuesto_manual else null end
+                 ,p.importe_presupuesto_manual= @importe_presupuesto_manual
                  -------------------------------------------------------------------------------
                  ,p.chk_conciliada_transferencia  =case when isnull(@fichero_transferencia,'')!='' then 1                                                 else null end  
                  ,p.fecha_conciliada_transferencia=case when isnull(@fichero_transferencia,'')!='' then getdate()                                         else null end

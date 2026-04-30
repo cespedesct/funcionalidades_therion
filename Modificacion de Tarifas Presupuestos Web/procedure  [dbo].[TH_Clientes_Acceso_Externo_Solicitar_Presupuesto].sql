@@ -1328,7 +1328,7 @@ begin try
              <td class="datoimporte" style="text-align:left;padding-left:0px">'
               +'<div id="sectionimportemanual" style="display:inline-block;width:53vw;border:solid 1px transparent;vertical-align:bottom;padding:0px>'
                     +'<a class="etiqueta">Importe Presupuesto (sin IVA):</a>
-                       <input id="importemanual" readonly class="datoentrada" type="number" value="" maxlength="8" syle="display:inline-block;text-align:right;width:6vw" min="1" max="10000" step="0.1" />
+                       <input id="importemanual" class="datoentrada" type="number" value="" maxlength="8" syle="display:inline-block;text-align:right;width:6vw" min="1" max="10000" step="0.1" />
                        <a id="codentid"     style="vertical-align:middle;font-size:0.80vw;font-weight:normal;color:black;display:none;width:6vw;border:solid 1px transparent"></a>
                        <a id="codobjet"     style="vertical-align:middle;font-size:0.80vw;font-weight:normal;color:black;display:none;width:6vw;border:solid 1px transparent"></a>
                        <a id="ivaaplicado"  style="vertical-align:middle;font-size:0.80vw;font-weight:normal;color:black;display:inline-block;width:6vw;border:solid 1px transparent"></a>
