@@ -518,7 +518,6 @@ begin try
       +' xmli_inm+=''<p><c>idufir</c><v>''                      +idufir.value+''</v></p>'';'
       +' xmli_inm+=''<p><c>nombrecontacto</c><v>''              +nombrecontacto.value+''</v></p>'';'
       +' xmli_inm+=''<p><c>telefonocontacto</c><v>''            +telefonocontacto.value+''</v></p>'';'
-      +' if (abririmportemanual.checked) {xmli_inm+=''<p><c>abririmportemanual</c><v>1</v></p>''} else {xmli_inm+=''<p><c>abririmportemanual</c><v>1</v></p>''};'
       +' xmli_inm+=''<p><c>importemanual</c><v>''               +importemanual.value+''</v></p>'';'
       -------------------------------------------------------------------------------------------------
       set @ico_grabacion+=
@@ -650,7 +649,6 @@ begin try
       +' xmli+=''<p><c>municipio</c><v>''+municipio.value+''</v></p>'';'
       +' xmli+=''<p><c>importemanual</c><v>''+importemanual.value+''</v></p>'';'
       +' if (tramitacionurgente.checked) {xmli+=''<p><c>tramitacionurgente</c><v>1</v></p>''} else {xmli+=''<p><c>tramitacionurgente</c><v>0</v></p>''};'
-      +' if (abririmportemanual.checked) {xmli+=''<p><c>abririmportemanual</c><v>1</v></p>''} else {xmli+=''<p><c>abririmportemanual</c><v>0</v></p>''};'
       +' xmli+=''</root>''; '
       +' var p='' '+dbo.THERION_EnCriptar_Cadena_con_Clave ('TH_Clientes_Acceso_Externo_Solicitar_Presupuesto_Calcular_Tarifa','19271812')+' '';'
           +' p+='' || [NOWAIT]@datos=·''+xmli+''·'';'
@@ -924,7 +922,7 @@ begin try
        ------------------------
        +'<tr><td class="eticomp">
                 <a style="display:inline-block;width:2vw;"></a>
-                <input type ="checkbox" id="tramitacionurgente" class="datoentrada" onchange="'+@calculo_tarifa+'" style="vertical-align:middle"/>
+                <input type ="checkbox" id="tramitacionurgente" class="datoentrada" style="vertical-align:middle"/>
                 <a style="display:inline-block;width:0.5vw;"></a>
                 <a style="vertical-align:middle;font-size:0.80vw;font-weight:normal;color:black;display:inline-block;width:auto;">
                   <b><u>Tramitación URGENTE (incremento de la tarifa en un 15%)</u></b>. 
@@ -1071,7 +1069,7 @@ begin try
        set @html+=
        +'<tr style="height:2vh">
            <td class="datoencargo">'
-                    +'<a class="etiqueta etipri">Tipo de inmueble:</a><select id="tipoinmueble" class="datoentrada" onchange="'+@calculo_tarifa+'" style ="display:inline-block;width:25.3vw;height:2.7vh">'+isnull(@lista_tipo_inmueble,'')+'</select>' 
+                    +'<a class="etiqueta etipri">Tipo de inmueble:</a><select id="tipoinmueble" class="datoentrada" style ="display:inline-block;width:25.3vw;height:2.7vh">'+isnull(@lista_tipo_inmueble,'')+'</select>' 
               +'<p class="separatacam"></p>'
               +'<a class="etiqueta etipri">Dirección:</a><input id="calle" class="datoentrada" type="text" value="" maxlength="60" style="display:inline-block;width:25vw;"/>' 
               +'<a class="etiqueta " style="display:inline-block;width:2.5vw;" >Núm.:</a><input id="numerocalle" class="datoentrada"  type="text" value="" maxlength="10" style="display:inline-block;width:4vw;"/>' 
@@ -1330,10 +1328,9 @@ begin try
              <td class="datoimporte" style="text-align:left;padding-left:0px">'
               +'<div id="sectionimportemanual" style="display:inline-block;width:53vw;border:solid 1px transparent;vertical-align:bottom;padding:0px>'
                     +'<a class="etiqueta">Importe Presupuesto (sin IVA):</a>
-                       <input id="importemanual" readonly class="datoentrada" type="number" value="" maxlength="8" syle="display:inline-block;text-align:right;width:6vw" min="1" max="10000" step="0.1" onchange="'+@calculo_tarifa+'" />
-                       <input type    ="checkbox" id="abririmportemanual" class="datoentrada" style="vertical-align:middle" onchange="importemanual.readOnly=!this.checked;'+@calculo_tarifa+'" />
-                       <a style="display:inline-block;width:0.2vw;"></a>
-                       <a style="vertical-align:middle;font-size:0.80vw;font-weight:normal;color:black;display:inline-block;width:15vw;"> <b><i>Permite cambiar importe.</i></b> </a>
+                       <input id="importemanual" readonly class="datoentrada" type="number" value="" maxlength="8" syle="display:inline-block;text-align:right;width:6vw" min="1" max="10000" step="0.1" />
+
+      
                        <a id="codentid"     style="vertical-align:middle;font-size:0.80vw;font-weight:normal;color:black;display:none;width:6vw;border:solid 1px transparent"></a>
                        <a id="codobjet"     style="vertical-align:middle;font-size:0.80vw;font-weight:normal;color:black;display:none;width:6vw;border:solid 1px transparent"></a>
                        <a id="ivaaplicado"  style="vertical-align:middle;font-size:0.80vw;font-weight:normal;color:black;display:inline-block;width:6vw;border:solid 1px transparent"></a>
