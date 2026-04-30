@@ -1,0 +1,7 @@
+SELECT TOP (1000) [codtasad]
+      ,[email]
+      ,[actmail]
+      ,[anulado]
+      ,[nuevo]
+      ,[comentario]
+  FROM [CORITEL].[dbo].[th_tasmail]

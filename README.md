@@ -1,1 +1,0 @@
-"# funcionalidades_therion" 

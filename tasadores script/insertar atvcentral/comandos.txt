@@ -1,0 +1,77 @@
+Te paso los inserts que se hacen en el alta de tasadores.
+
+Creo que no me haya dejado nada.
+
+Cualquier duda o que me falte algo dimelo.
+
+
+
+
+    cmd$ = "INSERT INTO taotasad "
+    cmd$ = cmd$ + "(codtasad,dnitasad,nomtasad,ap1tasad,ap2tasad,numasign,modcobta,ctabanca,ndircorr,ndircobr,codcabas,anulado,numbanco,numsucur,"
+    cmd$ = cmd$ + "fecalta,fecbaja,observaciones,encargoprueba,numinforpruebas,iban)"
+    cmd$ = cmd$ + "VALUES('" + TX_CODTASAD + "', '"
+    cmd$ = cmd$ + Trim$(TX_DNITASAD) + "', '" + Trim$(TX_NOMTASAD) + "', '"
+    cmd$ = cmd$ + Trim$(TX_AP1TASAD) + "', '" + Trim$(TX_AP2TASAD) + "',0, '"
+    cmd$ = cmd$ + modo_cobro$ + "', '"
+    cmd$ = cmd$ + Trim$(TX_CTABANCA) + "', '" + Trim$(CB_DIRECORR) + "', '"
+    cmd$ = cmd$ + Trim$(CB_DIRECOBR) + "', '000', '" + anulado$
+    cmd$ = cmd$ + "', '" + Trim$(TX_NUMBANCO) + "', '"
+    cmd$ = cmd$ + Trim$(TX_NUMSUCUR) + "',convert(datetime,'" + FECHA_ALTA + "',103),'','" & OBSERVACIONES & "'"
+
+    If frmTablaTasadores.RB_SI.Value = True Then   — ENCARGOS DE PRUEBA  MARCADO COMO SI
+        cmd$ = cmd$ + ",'1','" & Trim(frmTablaTasadores.TX_NUMENC.Text) & "'"
+    Else
+        cmd$ = cmd$ + ",'0',''"
+    End If
+                       
+    cmd$ = cmd$ + ",'" & TXT_Iban & "')"
+
+
+OBSERVACIONES:  sale de esta otra ventana que aparece cuando se da de alta un tasador
+Modo_cobro : toma dos valores ( talón -> 0 , transferencia bancaria ->1)
+
+Los Comentarios Tasador se guardan en th_tasmail
+
+
+
+      --FOTO DEL TASADOR
+      cmd$ = "INSERT INTO taorfota VALUES('" + TX_CODTASAD
+        cmd$ = cmd$ + "',0x80)"         
+                                    
+
+      --COLEGIO DE ARQUITECTO
+      cmd$ = "INSERT taortaco VALUES('" + TX_CODTASAD + "','" + txtCodColegio + "','" + txtcolegiado + "')"
+            
+        Los colegios salen de esta tabla:  select * from CORITEL..taocoleg order by procoleg
+
+
+--HISTORICO TASADOR(FECHA DE ALTA/BAJA, QUIEN LO DA DE ALTA/BAJA)
+    cmd$ = "insert th_histas values ('" + Trim(TX_CODTASAD.Text) + "','" + usuario$ + "'"
+          cmd$ = cmd$ + ",CONVERT(DATETIME,'" + x_fecha_accion$ + "',103),'',convert(datetime,'" + FECHA_ALTA + "',103))"
+
+
+--CORREO ELECTRONICO Y COMENTARIOS DEL TASADOR
+cmd$ = "INSERT into th_tasmail (codtasad, email, actmail, anulado, nuevo, comentario ) values('" + TX_CODTASAD + "','" + Trim(TX_EMAIL) + "','0','0','" & Me.chk_EnvioEmail.Value & "','" & tx_Comentario & "')"
+
+
+--TELEFONO MOVIL Y CONTACTO ADMINISTRATIVO 
+ cmd$ = "INSERT into th_movta (codtasad,movil,tel_contacto_adm) values('" + TX_CODTASAD + "','" + movil$ + "','" + teladmin$ + "')"
+
+
+--DIRECCIONES POSTALES  
+    cmd$ = "INSERT INTO taoditas VALUES('" + TX_CODTASAD + "', '"
+    cmd$ = cmd$ + Trim$(CB_NDIRETASA) + "', '" + Trim$(TX_DIRETASA) + "', '"
+    cmd$ = cmd$ + Trim$(TX_CODPOSTA) + "', '" + Trim$(LA_CODPROVI) + "', '"
+    cmd$ = cmd$ + Trim$(LA_LOCALIDAD) + "', '"
+    cmd$ = cmd$ + telf1$ + "', '" + telf2$ + "', '" + fax$ + "', '"
+    cmd$ = cmd$ + Trim$(TX_OBSDITAS) + "')"
+
+--USUARIO WEB
+    cmd$ = "        INSERT INTO iTH_Usuarios (USU_Codigo,USU_Descripcion,USU_Password,USU_CambioPassword,USU_Tipo,PER_Codigo,USU_Identificador,USU_Defecto1,USU_Defecto2,USU_Defecto3,USU_Fecha)"
+          cmd$ = cmd$ & " VALUES(RTRIM(LTRIM('tas' + '" & TX_CODTASAD & "')),'" & TX_CODTASAD & " - " & TX_AP1TASAD & "','" & gsEncriptar("X" & Mid(TX_NOMTASAD, 1, 1) & Mid(TX_AP1TASAD, 1, 2)) & "','1','T','TASAD','" & TX_CODTASAD & "',NULL,NULL,NULL,GETDATE())"
+
+
+La contraseña web va encriptada, el valor que se encripta es : "X" +   Left(TX_NOMTASAD, 1) +  Left(TX_AP1TASAD, 2)
+
+La funcion de encriptacion la adjunto al correo en un documento de texto

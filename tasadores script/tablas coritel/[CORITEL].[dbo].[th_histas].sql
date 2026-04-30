@@ -1,0 +1,6 @@
+SELECT TOP (1000) [codtasad]
+      ,[usuario]
+      ,[fec_accion]
+      ,[fecbaja]
+      ,[fecalta]
+  FROM [CORITEL].[dbo].[th_histas]
