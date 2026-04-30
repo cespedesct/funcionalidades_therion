@@ -662,7 +662,11 @@ begin try
                     end
                end
          end
-         
+      if (isnull(@importemanual,'')='')
+         begin
+            set @validaciones+='<li>El dato de IMPORTE PRESUPUESTO debe estar informado</li>'
+         end
+
       set @cpaso='Paso 005'
 
       if isnull(@idufir,'')=''
@@ -719,7 +723,7 @@ begin try
                  ---------------------------- 
               end
          end
-
+    
       --------------------------------------
 
       declare @js varchar(max)=''
