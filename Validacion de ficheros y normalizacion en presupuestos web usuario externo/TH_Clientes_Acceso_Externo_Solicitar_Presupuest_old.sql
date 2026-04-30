@@ -143,6 +143,10 @@ begin try
            document.title = "Presupuesto";
           }'+char(10)
       +'</script>'
+
+      -----------------------------------
+       -- Código insertado por Fabrizio
+       -----------------------------------
       set @html+=  
        +'<script type="text/javascript">'
       +'// --- Normalización de nombres de archivos ---'+char(10)
@@ -156,7 +160,7 @@ begin try
       +'        .replace(/[^a-zA-Z0-9._-]/g, "_");'+char(10)
       +'}'+char(10)
 
-        +'function Subeficheros_Normaliza(input, panel) {'+char(10)
+        +'function Subeficheros_Normalizado(input, panel) {'+char(10)
         +'    if (input.files && input.files.length > 0) {'+char(10)
         +'        var file = input.files[0];'+char(10)
         +'        var normalized = normalizeFileName(file.name);'+char(10)
@@ -1233,7 +1237,7 @@ begin try
                         +' tabla_asociada="TH_Presupuestos_WEB_'+@semilla_ficheros+'" '
                         +' codigo_tabla_asociada="1" '
                         +' title="Seleccione el fichero correspondiente al DNI/Pasaporte" '         -- CAMPO FICHERO siendo GUID el identificador a grabar en tabla_asociada
-                                          +' onchange="Subeficheros_Normaliza(this, document.getElementById(''PGFiles'') );" '  -- EVENTO PARA SUBIR SIENDO primer paramámetro THIS O EL CAMPO FICHERO Y SEGUNDO PARAMETRO EL DIV DONDE SE VAN A MOSTRAR LAS EVOLUCIONES
+                                          +' onchange="Subeficheros_Normalizado(this, document.getElementById(''PGFiles'') );" '  -- EVENTO PARA SUBIR SIENDO primer paramámetro THIS O EL CAMPO FICHERO Y SEGUNDO PARAMETRO EL DIV DONDE SE VAN A MOSTRAR LAS EVOLUCIONES
                                                                                                     -- Genera un registro -> select f.fileName, f.tabla_asociada, f.codigo_tabla_asociada from SISTEMA_ficheros f (nolock) where f.tabla_asociada='TH_Tasadores_'+@semilla_ficheros+'' and codigo_tabla_asociada=@fk_TH_Tasadores
                   +'/><br>' 
                   +'<div id="PGFiles_dni" style="'+@css_pg_ficheros+'"></div>'  -- DIV DONDE VAN LOS NOMBRES DE FICHEROS Y LA PROGRESS BAR
@@ -1252,7 +1256,7 @@ begin try
                            +' tabla_asociada       ="TH_Presupuestos_WEB_notasimple_'+@semilla_ficheros+'" '
                            +' codigo_tabla_asociada="1" '
                            +' title="Seleccione el fichero correspondiente a la Nota Simple" '                    -- CAMPO FICHERO siendo GUID el identificador a grabar en tabla_asociada
-                                             +' onchange="Subeficheros_Normaliza(this, document.getElementById(''PGFiles_notasimple'') );" '  -- EVENTO PARA SUBIR SIENDO primer paramámetro THIS O EL CAMPO FICHERO Y SEGUNDO PARAMETRO EL DIV DONDE SE VAN A MOSTRAR LAS EVOLUCIONES
+                                             +' onchange="Subeficheros_Normalizado(this, document.getElementById(''PGFiles_notasimple'') );" '  -- EVENTO PARA SUBIR SIENDO primer paramámetro THIS O EL CAMPO FICHERO Y SEGUNDO PARAMETRO EL DIV DONDE SE VAN A MOSTRAR LAS EVOLUCIONES
                                                                                                                    -- Genera un registro -> select f.fileName, f.tabla_asociada, f.codigo_tabla_asociada from SISTEMA_ficheros f (nolock) where f.tabla_asociada='TH_Tasadores_'+@semilla_ficheros+'' and codigo_tabla_asociada=@fk_TH_Tasadores
                            +'/><br>' 
                      +'<div id="PGFiles_notasimple" style="'+@css_pg_ficheros+'"></div>'  -- DIV DONDE VAN LOS NOMBRES DE FICHEROS Y LA PROGRESS BAR
@@ -1272,7 +1276,7 @@ begin try
                            +' tabla_asociada       ="TH_Presupuestos_WEB_justificante_'+@semilla_ficheros+'" '
                            +' codigo_tabla_asociada="1" '
                            +' title="Seleccione el fichero correspondiente al Justificante de Autorización" '       -- CAMPO FICHERO siendo GUID el identificador a grabar en tabla_asociada
-                                             +' onchange="Subeficheros_Normaliza(this, document.getElementById(''PGFiles_justificante'') );" '  -- EVENTO PARA SUBIR SIENDO primer paramámetro THIS O EL CAMPO FICHERO Y SEGUNDO PARAMETRO EL DIV DONDE SE VAN A MOSTRAR LAS EVOLUCIONES
+                                             +' onchange="Subeficheros_Normalizado(this, document.getElementById(''PGFiles_justificante'') );" '  -- EVENTO PARA SUBIR SIENDO primer paramámetro THIS O EL CAMPO FICHERO Y SEGUNDO PARAMETRO EL DIV DONDE SE VAN A MOSTRAR LAS EVOLUCIONES
                                                                                                                     -- Genera un registro -> select f.fileName, f.tabla_asociada, f.codigo_tabla_asociada from SISTEMA_ficheros f (nolock) where f.tabla_asociada='TH_Tasadores_'+@semilla_ficheros+'' and codigo_tabla_asociada=@fk_TH_Tasadores
                            +'/><br>' 
                      +'<div id="PGFiles_justificante" style="'+@css_pg_ficheros+'"></div>'  -- DIV DONDE VAN LOS NOMBRES DE FICHEROS Y LA PROGRESS BAR
@@ -1293,7 +1297,7 @@ begin try
                            +' tabla_asociada       ="TH_Presupuestos_WEB_otrosficheros_'+@semilla_ficheros+'" '
                            +' codigo_tabla_asociada="1" '
                            +' title="Seleccione el fichero correspondiente a Otros Ficheros" '                      -- CAMPO FICHERO siendo GUID el identificador a grabar en tabla_asociada
-                                             +' onchange="Subeficheros_Normaliza(this, document.getElementById(''PGFiles_otrosficheros'') );" ' -- EVENTO PARA SUBIR SIENDO primer paramámetro THIS O EL CAMPO FICHERO Y SEGUNDO PARAMETRO EL DIV DONDE SE VAN A MOSTRAR LAS EVOLUCIONES
+                                             +' onchange="Subeficheros_Normalizado(this, document.getElementById(''PGFiles_otrosficheros'') );" ' -- EVENTO PARA SUBIR SIENDO primer paramámetro THIS O EL CAMPO FICHERO Y SEGUNDO PARAMETRO EL DIV DONDE SE VAN A MOSTRAR LAS EVOLUCIONES
                                                                                                                     -- Genera un registro -> select f.fileName, f.tabla_asociada, f.codigo_tabla_asociada from SISTEMA_ficheros f (nolock) where f.tabla_asociada='TH_Tasadores_'+@semilla_ficheros+'' and codigo_tabla_asociada=@fk_TH_Tasadores
                            +'/><br>' 
                      +'<div id="PGFiles_otrosficheros" style="'+@css_pg_ficheros+'"></div>'  -- DIV DONDE VAN LOS NOMBRES DE FICHEROS Y LA PROGRESS BAR
@@ -1314,7 +1318,7 @@ begin try
                            +' tabla_asociada       ="TH_Presupuestos_WEB_transferencia_'+@semilla_ficheros+'" '
                            +' codigo_tabla_asociada="1" '
                            +' title="Seleccione el fichero correspondiente al Justificante de Transferencia" '       -- CAMPO FICHERO siendo GUID el identificador a grabar en tabla_asociada
-                                             +' onchange="Subeficheros_Normaliza(this, document.getElementById(''PGFiles_transferencia''));" '   -- EVENTO PARA SUBIR SIENDO primer paramámetro THIS O EL CAMPO FICHERO Y SEGUNDO PARAMETRO EL DIV DONDE SE VAN A MOSTRAR LAS EVOLUCIONES
+                                             +' onchange="Subeficheros_Normalizado(this, document.getElementById(''PGFiles_transferencia''));" '   -- EVENTO PARA SUBIR SIENDO primer paramámetro THIS O EL CAMPO FICHERO Y SEGUNDO PARAMETRO EL DIV DONDE SE VAN A MOSTRAR LAS EVOLUCIONES
                                                                                                                      -- Genera un registro -> select f.fileName, f.tabla_asociada, f.codigo_tabla_asociada from SISTEMA_ficheros f (nolock) where f.tabla_asociada='TH_Tasadores_'+@semilla_ficheros+'' and codigo_tabla_asociada=@fk_TH_Tasadores
                            +'/><br>' 
                      +'<div id="PGFiles_transferencia" style="'+@css_pg_ficheros+';width:21.5vw;"></div>' -- DIV DONDE VAN LOS NOMBRES DE FICHEROS Y LA PROGRESS BAR
