@@ -86,15 +86,19 @@ begin try
          end
       ---------------------------------------------
 
-      declare @grabar_importe_pago varchar(max)=
-      ' if (importetransferencia.value=='''') {alert(''Informar del Importe de la transferencia'');return}
-        if (!cuentadestinook.checked) {alert(''Marcar como OK la cuenta destino'');return}
-        if (fechatransferencia.value=='''') {alert(''Informar de la Fecha de la transferencia'');return}
-        var sSQL=''exec TH_Clientes_Acceso_Externo_Solicitar_Presupuesto_Marcar_Check_Pagado_con_importe'
-                +' @cod_TH_Presupuestos_Web=null,@usuario=null'
-                +',@importe=''+importetransferencia.value+'', @fechatranferencia=·''+fechatransferencia.value+''·'';
-         WSQLExt(sSQL); 
-      '
+          declare @grabar_importe_pago varchar(max)=
+          ' var errores = [];
+            if (importetransferencia.value=='''' ) errores.push(''Informar del Importe de la transferencia'');
+            if (conceptotransferencia.value=='''') errores.push(''Informar del Concepto de la transferencia'');
+            if (fechatransferencia.value=='''' ) errores.push(''Informar de la Fecha de la transferencia'');
+       
+            if (errores.length > 0) { alert(errores.join(''\n'')); return }
+
+            var sSQL=''exec TH_Clientes_Acceso_Externo_Solicitar_Presupuesto_Marcar_Check_Pagado_con_importe'
+                     +' @cod_TH_Presupuestos_Web=null,@usuario=null'
+                     +',@importe=''+importetransferencia.value+'', @fechatranferencia=·''+fechatransferencia.value+''·'';
+             WSQLExt(sSQL); 
+          '
 
       declare @cancelar_importe_pago varchar(max)=
       ' var aCapaLevantada;
@@ -109,7 +113,9 @@ begin try
           +isnull(@obj_fichero,'')
           +'<div style="vertical-align:top;display:inline-block;width:35%;height:54vh;border:solid 0px red;padding-left:1vw;">'
                 +'<br><span style="vertical-align:middle;display:inline-block;width:15vw;padding-right:1vw;font-size:1vw;text-align:right;">Importe Transferencia:</span>'
-                +'<input id="importetransferencia" style="vertical-align:middle;display:inline-block;width:10vw;font-size:1vw;text-align:right;" type="number" step="0.01" />'
+                +'<input id="importetransferencia" style="vertical-align:middle;display:inline-block;width:10vw;font-size:1vw;text-align:right;height:20px;" type="number" step="0.01" />'
+                +'<br><br><span style="display:inline-block;width:15vw;padding-right:1vw;font-size:1vw;text-align:right;">Concepto Transferencia:</span>'
+                +'<textarea id="conceptotransferencia" style="vertical-align:middle;display:inline-block;width:10vw;font-size:1vw;text-align:right;" type="text" /></textarea>'
                 +'<br><br><span style="display:inline-block;width:15vw;padding-right:1vw;font-size:1vw;text-align:right;">Fecha Transferencia:</span>'
                 +'<input id="fechatransferencia" style="vertical-align:middle;display:inline-block;width:10vw;font-size:1vw;text-align:right;" type="date" value=""/>'
                 +'<br><br>'
