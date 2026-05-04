@@ -61,6 +61,7 @@ begin try
       declare @extension           varchar(10)
       declare @importe_presupuesto decimal(19,2)
       declare @obj_fichero         varchar(max)
+      declare @concepto_transferencia varchar(max)
       declare @fecha_transferencia varchar(10)=format(getdate(),'yyyy-MM-dd')
 
       select @url_fichero        ='data:application/'+replace(lower([ext].ext),'jpeg','jpg')+';base64,'+dbo.f_BinaryToBase64(f.fileBynari)
@@ -96,7 +97,7 @@ begin try
 
             var sSQL=''exec TH_Clientes_Acceso_Externo_Solicitar_Presupuesto_Marcar_Check_Pagado_con_importe'
                      +' @cod_TH_Presupuestos_Web=null,@usuario=null'
-                     +',@importe=''+importetransferencia.value+'', @fechatranferencia=·''+fechatransferencia.value+''·'';
+                     +',@importe=''+importetransferencia.value+'',@concepto_transferencia=''+conceptotransferencia.value+'', @fechatranferencia=·''+fechatransferencia.value+''·'';
              WSQLExt(sSQL); 
           '
 
