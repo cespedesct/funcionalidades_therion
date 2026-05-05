@@ -140,6 +140,7 @@ begin try
              ,@importemanual                  varchar(300)
              ,@importetransferenciavalidado   varchar(300)
              ,@fechatransferenciavalidado     varchar(300)
+             ,@conceptotransferenciavalidado     varchar(300)
              ---------------------------------------------------------
              ,@nombrecontacto                 varchar(300)
              ,@telefonocontacto               varchar(300)
@@ -223,6 +224,8 @@ begin try
       set @importemanual               =(select top 1 xc.value('v[1]','varchar(300)') from @x1.nodes('/root/p') as xt(xc) where xc.value('c[1]','varchar(100)')='importemanual'               )
       set @importetransferenciavalidado=(select top 1 xc.value('v[1]','varchar(300)') from @x1.nodes('/root/p') as xt(xc) where xc.value('c[1]','varchar(100)')='importetransferenciavalidado')
       set @fechatransferenciavalidado  =(select top 1 xc.value('v[1]','varchar(300)') from @x1.nodes('/root/p') as xt(xc) where xc.value('c[1]','varchar(100)')='fechatransferenciavalidado'  )
+      set @conceptotransferenciavalidado=(select top 1 xc.value('v[1]','varchar(300)') from @x1.nodes('/root/p') as xt(xc) where xc.value('c[1]','varchar(100)')='conceptotransferenciavalidado'  )
+      
       set @refcatastral                =(select top 1 xc.value('v[1]','varchar(300)') from @x1.nodes('/root/p') as xt(xc) where xc.value('c[1]','varchar(100)')='refcatastral'                )
       set @regpropiedad                =(select top 1 xc.value('v[1]','varchar(300)') from @x1.nodes('/root/p') as xt(xc) where xc.value('c[1]','varchar(100)')='regpropiedad'                )
       set @fincaregistral              =(select top 1 xc.value('v[1]','varchar(300)') from @x1.nodes('/root/p') as xt(xc) where xc.value('c[1]','varchar(100)')='fincaregistral'              )
@@ -687,7 +690,7 @@ begin try
       if isnull(@fichero_transferencia,'')!=''
          begin
            ----------------------------
-           if @importetransferenciavalidado is null or @fechatransferenciavalidado is null
+           if @importetransferenciavalidado is null or @fechatransferenciavalidado is null or @conceptotransferenciavalidado is null
               begin
                  set @validaciones+='<li>Es necesario validar el justificante de transferencia</li>'
               end
@@ -707,6 +710,20 @@ begin try
                  end try
                  begin catch
                        set @validaciones+='<li>Es necesario validar el importe del justificante de transferencia</li>'
+                 end catch
+                   ------------------------------------------------------------------------------
+                 -- Validar el concepto de la transferencia si hay justificante de transferencia
+                 ------------------------------------------------------------------------------
+                 begin try
+                       declare @verificar_conceptotransferenciavalidado varchar(100)
+                       set @verificar_conceptotransferenciavalidado = @conceptotransferenciavalidado
+                       if ISNULL(@verificar_conceptotransferenciavalidado,'')=''
+                          begin
+                             set @validaciones+='<li>Es necesario validar el concepto del justificante de transferencia</li>'
+                          end
+                 end try
+                 begin catch
+                       set @validaciones+='<li>Es necesario validar el concepto del justificante de transferencia</li>'
                  end catch
                  ------------------------------------------------------------------------------
                  -- Validar la fecha de la transferencia si hay justificante de transferencia
@@ -847,6 +864,7 @@ begin try
                  ,p.fecha_conciliada_transferencia=case when isnull(@fichero_transferencia,'')!='' then getdate()                                         else null end
                  ,p.usuario_concilia_transferencia=case when isnull(@fichero_transferencia,'')!='' then us.descripcion                                    else null end
                  ,p.importe_concilia_transferencia=case when isnull(@fichero_transferencia,'')!='' then @importe_transferencia_validado                   else null end
+                 ,p.referencia_transferencia         =case when isnull(@fichero_transferencia,'')!='' then @conceptotransferenciavalidado                               else null end
                  ,p.fecha_pago_transferencia      =case when isnull(@fichero_transferencia,'')!='' then convert(datetime,@fechatransferenciavalidado,121) else null end
                  ,p.importe_pagado                =case when isnull(@fichero_transferencia,'')!='' then @importe_transferencia_validado                   else null end
                  ,p.chk_pagado_transferencia      =case when isnull(@fichero_transferencia,'')!='' then 1                                                 else null end

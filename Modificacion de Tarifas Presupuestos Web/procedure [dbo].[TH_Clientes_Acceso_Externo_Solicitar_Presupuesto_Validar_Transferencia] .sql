@@ -89,21 +89,23 @@ begin try
 
           declare @grabar_importe_pago varchar(max)=
           ' var errores = [];
+                
             if (importetransferencia.value=='''' ) errores.push(''Informar del Importe de la transferencia'');
             if (conceptotransferencia.value=='''') errores.push(''Informar del Concepto de la transferencia'');
             if (fechatransferencia.value=='''' ) errores.push(''Informar de la Fecha de la transferencia'');
-       
             if (errores.length > 0) { alert(errores.join(''\n'')); return }
 
             var sSQL=''exec TH_Clientes_Acceso_Externo_Solicitar_Presupuesto_Marcar_Check_Pagado_con_importe'
                      +' @cod_TH_Presupuestos_Web=null,@usuario=null'
-                     +',@importe=''+importetransferencia.value+'',@concepto_transferencia=''+conceptotransferencia.value+'', @fechatranferencia=·''+fechatransferencia.value+''·'';
+                     +',@importe=''+importetransferencia.value+'',@conceptotransferencia=·''+conceptotransferencia.value+''·''+'', @fechatranferencia=·''+fechatransferencia.value+''·'';
+            
+     
              WSQLExt(sSQL); 
           '
 
       declare @cancelar_importe_pago varchar(max)=
       ' var aCapaLevantada;
-        var aCapas=document.getElementsByClassName(''capalevantadaiframe'');
+        var aCapas=document.getElementsByClassName(''capale.vantadaiframe'');
         for (var i=0; i<aCapas.length; i++) {aCapaLevantada=aCapas[i]}
         document.body.removeChild(aCapaLevantada);
       '
@@ -116,7 +118,7 @@ begin try
                 +'<br><span style="vertical-align:middle;display:inline-block;width:15vw;padding-right:1vw;font-size:1vw;text-align:right;">Importe Transferencia:</span>'
                 +'<input id="importetransferencia" style="vertical-align:middle;display:inline-block;width:10vw;font-size:1vw;text-align:right;height:20px;" type="number" step="0.01" />'
                 +'<br><br><span style="display:inline-block;width:15vw;padding-right:1vw;font-size:1vw;text-align:right;">Concepto Transferencia:</span>'
-                +'<textarea id="conceptotransferencia" style="vertical-align:middle;display:inline-block;width:10vw;font-size:1vw;text-align:right;" type="text" /></textarea>'
+                +'<input id="conceptotransferencia" style="vertical-align:middle;display:inline-block;width:10vw;font-size:1vw;text-align:right;" type="text" /></input>'
                 +'<br><br><span style="display:inline-block;width:15vw;padding-right:1vw;font-size:1vw;text-align:right;">Fecha Transferencia:</span>'
                 +'<input id="fechatransferencia" style="vertical-align:middle;display:inline-block;width:10vw;font-size:1vw;text-align:right;" type="date" value=""/>'
                 +'<br><br>'

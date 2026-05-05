@@ -6,6 +6,7 @@ GO
 ALTER PROCEDURE [dbo].[TH_Clientes_Acceso_Externo_Solicitar_Presupuesto_Marcar_Check_Pagado_con_importe] 
         @cod_TH_Presupuestos_Web int 
        ,@importe                 decimal(19,2)
+       ,@conceptotransferencia   varchar(max)
        ,@fechatranferencia       varchar(10)
        ,@usuario                 int
 as
@@ -21,6 +22,7 @@ begin
                      ,l.importe_concilia_transferencia=@importe
                      ,l.fecha_pago_transferencia      =convert(datetime,@fechatranferencia,121)
                      ,l.importe_pagado                =@importe
+                     ,l.referencia_transferencia         =@conceptotransferencia
 		             from TH_Presupuestos_Web l
                outer apply (select top 1 us.descripcion from usuarios us (nolock) where us.codigo=@usuario) us
                where l.codigo=@cod_TH_Presupuestos_Web
@@ -50,6 +52,7 @@ begin
                      +'[INIEVAL]'
                        +'importetransferenciavalidado.value='+replace(isnull(format(@importe,'#.##','de-DE'),''),',','.')+';'
                        +'fechatransferenciavalidado.value="'+isnull(@fechatranferencia,'')+'";'
+                       +'conceptotransferenciavalidado.value="'+isnull(@conceptotransferencia,'')+'";'
                        +'var aCapaLevantada;'
                        +'var aCapas=document.getElementsByClassName(''capalevantadaiframe'');'
                        +'for (var i=0; i<aCapas.length; i++) {aCapaLevantada=aCapas[i]}'
