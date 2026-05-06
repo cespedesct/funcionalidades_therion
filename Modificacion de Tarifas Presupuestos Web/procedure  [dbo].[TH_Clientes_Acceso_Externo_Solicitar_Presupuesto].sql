@@ -143,6 +143,9 @@ begin try
            document.title = "Presupuesto";
           }'+char(10)
       +'</script>'
+      -----------------------
+      -- Agregado por Fabrizio
+      -----------------------
       set @html+=  
        +'<script type="text/javascript">'
       +'// --- Normalización de nombres de archivos ---'+char(10)
@@ -921,6 +924,10 @@ begin try
        ------------------------
        -- Tramitación urgente
        ------------------------
+
+      -----------------------
+      -- Agregado por Fabrizio
+      -----------------------
        +'<tr><td class="eticomp">
                 <a style="display:inline-block;width:2vw;"></a>
                 <input type ="checkbox" id="tramitacionurgente" class="datoentrada" style="vertical-align:middle"/>
@@ -1072,7 +1079,7 @@ begin try
        set @html+=
        +'<tr style="height:2vh">
            <td class="datoencargo">'
-                    +'<a class="etiqueta etipri">Tipo de inmueble:</a><select id="tipoinmueble" class="datoentrada" style ="display:inline-block;width:25.3vw;height:2.7vh">'+isnull(@lista_tipo_inmueble,'')+'</select>' 
+              +'<a class="etiqueta etipri">Tipo de inmueble:</a><select id="tipoinmueble" class="datoentrada" style ="display:inline-block;width:25.3vw;height:2.7vh">'+isnull(@lista_tipo_inmueble,'')+'</select>' 
               +'<p class="separatacam"></p>'
               +'<a class="etiqueta etipri">Dirección:</a><input id="calle" class="datoentrada" type="text" value="" maxlength="60" style="display:inline-block;width:25vw;"/>' 
               +'<a class="etiqueta " style="display:inline-block;width:2.5vw;" >Núm.:</a><input id="numerocalle" class="datoentrada"  type="text" value="" maxlength="10" style="display:inline-block;width:4vw;"/>' 
@@ -1352,6 +1359,9 @@ begin try
                           +'<span style="display:inline-block;padding-left:3px;width:1vw;font-size:0.70vw;text-align:left;">€</span>'
                            +'<a class="etiqueta">Fecha:</a>'
                           +'<input id="fechatransferenciavalidado" style="display:inline-block;width:6vw;font-size:0.70vw;text-align:right;" type="date" readonly /><br>'
+                                -----------------------
+                                -- Agregado por Fabrizio
+                                -----------------------
                           +'<br><a class="etiqueta ">Concepto:</a>'
                           +'<textarea id="conceptotransferenciavalidado" style="min-width:280px; min-height:100px;display:inline-block;width:4vw;font-size:0.70vw;text-align:right;" type="text" readonly style="text-align:right;width:5vw"></textarea>' 
                          

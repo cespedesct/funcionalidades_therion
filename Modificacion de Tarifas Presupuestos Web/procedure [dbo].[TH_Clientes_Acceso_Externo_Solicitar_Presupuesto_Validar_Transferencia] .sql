@@ -86,7 +86,9 @@ begin try
             set @obj_fichero='<div style="font-size:2vw;display:inline-block;width:'+@ancho_doc+';height:'+@alto_doc+';">EL FICHERO DE TRANSFERENCIA NO HA SIDO POSIBLE MOSTRARLO</div>'
          end
       ---------------------------------------------
-
+      -----------------------
+      -- Modificado por Fabrizio
+      -----------------------
           declare @grabar_importe_pago varchar(max)=
           ' var errores = [];
                 
@@ -105,7 +107,7 @@ begin try
 
       declare @cancelar_importe_pago varchar(max)=
       ' var aCapaLevantada;
-        var aCapas=document.getElementsByClassName(''capale.vantadaiframe'');
+        var aCapas=document.getElementsByClassName(''capalevantadaiframe'');
         for (var i=0; i<aCapas.length; i++) {aCapaLevantada=aCapas[i]}
         document.body.removeChild(aCapaLevantada);
       '

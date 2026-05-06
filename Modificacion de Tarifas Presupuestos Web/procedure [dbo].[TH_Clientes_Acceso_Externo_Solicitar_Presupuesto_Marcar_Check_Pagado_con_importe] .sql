@@ -48,6 +48,9 @@ begin
             end
           else
             begin
+                  -----------------------
+                  -- Modificado por Fabrizio
+                  -----------------------
                select 'OKNORELOAD'
                      +'[INIEVAL]'
                        +'importetransferenciavalidado.value='+replace(isnull(format(@importe,'#.##','de-DE'),''),',','.')+';'

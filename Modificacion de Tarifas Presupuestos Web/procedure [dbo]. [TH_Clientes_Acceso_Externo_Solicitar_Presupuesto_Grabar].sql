@@ -726,7 +726,10 @@ begin try
                  begin catch
                        set @validaciones+='<li>Es necesario validar el importe del justificante de transferencia</li>'
                  end catch
-                   ------------------------------------------------------------------------------
+                 -----------------------
+                 -- Agregado por Fabrizio
+                 -----------------------
+                 ------------------------------------------------------------------------------
                  -- Validar el concepto de la transferencia si hay justificante de transferencia
                  ------------------------------------------------------------------------------
                  begin try
@@ -1111,6 +1114,8 @@ begin try
 
                    */
 
+                   -----------------------------------------------------------------------
+                   -- Quitar la marca de presupuesto manual si coincide con la tarifa
                    -----------------------------------------------------------------------
                   
                    update w

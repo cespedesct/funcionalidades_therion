@@ -145,6 +145,9 @@ begin try
       
       set @cpaso='2'
 
+      -----------------------
+      -- Modificado por Fabrizio
+      -----------------------
          begin
             select @importe_pago_base=isnull([tar].tarifa,[tarbase].tarifa)*@porcentaje_urgente
             from (select [c]=0) a      
