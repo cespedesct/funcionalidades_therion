@@ -118,7 +118,7 @@ begin try
                 +'<br><span style="vertical-align:middle;display:inline-block;width:15vw;padding-right:1vw;font-size:1vw;text-align:right;">Importe Transferencia:</span>'
                 +'<input id="importetransferencia" style="vertical-align:middle;display:inline-block;width:10vw;font-size:1vw;text-align:right;height:20px;" type="number" step="0.01" />'
                 +'<br><br><span style="display:inline-block;width:15vw;padding-right:1vw;font-size:1vw;text-align:right;">Concepto Transferencia:</span>'
-                +'<input id="conceptotransferencia" style="vertical-align:middle;display:inline-block;width:10vw;font-size:1vw;text-align:right;" type="text" /></input>'
+                +'<textarea id="conceptotransferencia" style="min-height:100px;vertical-align:middle;display:inline-block;width:10vw;font-size:1vw;text-align:right;" type="text" /></textarea>'
                 +'<br><br><span style="display:inline-block;width:15vw;padding-right:1vw;font-size:1vw;text-align:right;">Fecha Transferencia:</span>'
                 +'<input id="fechatransferencia" style="vertical-align:middle;display:inline-block;width:10vw;font-size:1vw;text-align:right;" type="date" value=""/>'
                 +'<br><br>'

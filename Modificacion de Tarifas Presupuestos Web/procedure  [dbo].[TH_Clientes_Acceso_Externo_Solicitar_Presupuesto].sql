@@ -926,10 +926,12 @@ begin try
                 <input type ="checkbox" id="tramitacionurgente" class="datoentrada" style="vertical-align:middle"/>
                 <a style="display:inline-block;width:0.5vw;"></a>
                 <a style="vertical-align:middle;font-size:0.80vw;font-weight:normal;color:black;display:inline-block;width:auto;">
-                  <b><u>Tramitación URGENTE (incremento de la tarifa en un 15%)</u></b>. 
-                  Entrega en 72 horas desde el momento en el que el técnico disponga de toda la documentación y haya realizado la visita
-                </a>
-                <hr style="border:solid 1px #000">
+                  <b><u>Tramitación URGENTE (incremento de la tarifa en un 15%).</u></b><br> 
+                  <br><span style="font-size:0.70vw">• <b>Tramitación urgente solo para viviendas con o sin anejos (Máx. tres fincas registrales).</b> Entrega en 72h a partir de la visita.</span>
+                  <br><span style="font-size:0.70vw">• <b>Tramitación ordinaria de viviendas:</b> 5 días a partir de la visita y en ambos casos, siempre que se disponga de toda la documentación necesaria.</span>
+                  <br><span style="font-size:0.70vw">• Otros usos según presupuesto, en base a su complejidad.</span>
+              </a>
+                <hr style="border:solid 0px #000">
              </td>
         </tr>'+char(10)
 
@@ -949,7 +951,7 @@ begin try
                         class="datoentrada" 
                         style="vertical-align:middle" 
                         value="M"
-                        checked 
+                        checked  
                         onchange="trsolicitante_fac.style.display=''none'';trsolicitante_sel_fac.style.display=''none'';
                                   if (otrosolicitantefacturacion.checked) {trsolicitante_sel_fac.style.display='''';trsolicitante_fac.style.display='''';}
                                   "
@@ -1348,10 +1350,11 @@ begin try
                           +'<a class="etiqueta ">Importe:</a>'
                           +'<input id="importetransferenciavalidado" style="display:inline-block;width:4vw;font-size:0.70vw;text-align:right;" type="number" readonly style="text-align:right;width:5vw" min="1" max="80000" step="1"/>' 
                           +'<span style="display:inline-block;padding-left:3px;width:1vw;font-size:0.70vw;text-align:left;">€</span>'
-                          +'<a class="etiqueta ">Concepto:</a>'
-                          +'<input id="conceptotransferenciavalidado" style="display:inline-block;width:4vw;font-size:0.70vw;text-align:right;" type="text" readonly style="text-align:right;width:5vw" />' 
-                          +'<a class="etiqueta">Fecha:</a>'
-                          +'<input id="fechatransferenciavalidado" style="display:inline-block;width:6vw;font-size:0.70vw;text-align:right;" type="date" readonly />'
+                           +'<a class="etiqueta">Fecha:</a>'
+                          +'<input id="fechatransferenciavalidado" style="display:inline-block;width:6vw;font-size:0.70vw;text-align:right;" type="date" readonly /><br>'
+                          +'<br><a class="etiqueta ">Concepto:</a>'
+                          +'<textarea id="conceptotransferenciavalidado" style="min-width:280px; min-height:100px;display:inline-block;width:4vw;font-size:0.70vw;text-align:right;" type="text" readonly style="text-align:right;width:5vw"></textarea>' 
+                         
                      +'</p>'
               +'</div>'
             +'</td>'
