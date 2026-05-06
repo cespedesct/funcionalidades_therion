@@ -40,7 +40,8 @@ begin try
              ,@superficie         varchar(200)
              ,@codentid           varchar(20)
              ,@municipio          varchar(20) 
-             ,@importemanual      varchar(20)  
+             ,@importemanual      varchar(20) 
+             ,@abririmportemanual varchar(20) 
              ,@tramitacionurgente varchar(20)
 
       select @tipoinmueble      =xc.value('v[1]', 'varchar(200)') from @x1.nodes('/root/p') as xt(xc) where xc.value('c[1]', 'varchar(500)')='tipoinmueble'
@@ -48,6 +49,7 @@ begin try
       select @codentid          =xc.value('v[1]', 'varchar(20)' ) from @x1.nodes('/root/p') as xt(xc) where xc.value('c[1]', 'varchar(20)' )='codentid'
       select @municipio         =xc.value('v[1]', 'varchar(20)' ) from @x1.nodes('/root/p') as xt(xc) where xc.value('c[1]', 'varchar(20)' )='municipio'
       select @importemanual     =xc.value('v[1]', 'varchar(20)' ) from @x1.nodes('/root/p') as xt(xc) where xc.value('c[1]', 'varchar(20)' )='importemanual'
+      select @abririmportemanual=xc.value('v[1]', 'varchar(20)' ) from @x1.nodes('/root/p') as xt(xc) where xc.value('c[1]', 'varchar(20)' )='abririmportemanual'
       select @tramitacionurgente=xc.value('v[1]', 'varchar(20)' ) from @x1.nodes('/root/p') as xt(xc) where xc.value('c[1]', 'varchar(20)' )='tramitacionurgente'
 
       set @cpaso='1'
@@ -145,6 +147,11 @@ begin try
       
       set @cpaso='2'
 
+      if exists (select rtrim(ltrim(@abririmportemanual)) intersect select '1')
+         begin   
+            select @importe_pago_base=@nimportemanual
+         end
+       else 
          begin
             select @importe_pago_base=isnull([tar].tarifa,[tarbase].tarifa)*@porcentaje_urgente
             from (select [c]=0) a      

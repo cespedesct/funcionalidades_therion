@@ -137,10 +137,10 @@ begin try
              ,@regpropiedad                   varchar(300)
              ,@fincaregistral                 varchar(300)
              ,@idufir                         varchar(300)
+             ,@abririmportemanual             varchar(300)
              ,@importemanual                  varchar(300)
              ,@importetransferenciavalidado   varchar(300)
              ,@fechatransferenciavalidado     varchar(300)
-             ,@conceptotransferenciavalidado     varchar(300)
              ---------------------------------------------------------
              ,@nombrecontacto                 varchar(300)
              ,@telefonocontacto               varchar(300)
@@ -189,6 +189,7 @@ begin try
       ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
       set @mismosolicitantefacturacion =(select top 1 xc.value('v[1]','varchar(300)') from @x1.nodes('/root/p') as xt(xc) where xc.value('c[1]','varchar(100)')='mismosolicitantefacturacion' )
       set @otrosolicitantefacturacion  =(select top 1 xc.value('v[1]','varchar(300)') from @x1.nodes('/root/p') as xt(xc) where xc.value('c[1]','varchar(100)')='otrosolicitantefacturacion'  )
+      set @abririmportemanual          =(select top 1 xc.value('v[1]','varchar(300)') from @x1.nodes('/root/p') as xt(xc) where xc.value('c[1]','varchar(100)')='abririmportemanual'          )
       ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------       
       set @rempresa_fac                =(select top 1 xc.value('v[1]','varchar(300)') from @x1.nodes('/root/p') as xt(xc) where xc.value('c[1]','varchar(100)')='rempresa_fac'                )
       set @rpersona_fac                =(select top 1 xc.value('v[1]','varchar(300)') from @x1.nodes('/root/p') as xt(xc) where xc.value('c[1]','varchar(100)')='rpersona_fac'                )
@@ -225,8 +226,6 @@ begin try
       set @importemanual               =(select top 1 xc.value('v[1]','varchar(300)') from @x1.nodes('/root/p') as xt(xc) where xc.value('c[1]','varchar(100)')='importemanual'               )
       set @importetransferenciavalidado=(select top 1 xc.value('v[1]','varchar(300)') from @x1.nodes('/root/p') as xt(xc) where xc.value('c[1]','varchar(100)')='importetransferenciavalidado')
       set @fechatransferenciavalidado  =(select top 1 xc.value('v[1]','varchar(300)') from @x1.nodes('/root/p') as xt(xc) where xc.value('c[1]','varchar(100)')='fechatransferenciavalidado'  )
-      set @conceptotransferenciavalidado=(select top 1 xc.value('v[1]','varchar(300)') from @x1.nodes('/root/p') as xt(xc) where xc.value('c[1]','varchar(100)')='conceptotransferenciavalidado'  )
-      
       set @refcatastral                =(select top 1 xc.value('v[1]','varchar(300)') from @x1.nodes('/root/p') as xt(xc) where xc.value('c[1]','varchar(100)')='refcatastral'                )
       set @regpropiedad                =(select top 1 xc.value('v[1]','varchar(300)') from @x1.nodes('/root/p') as xt(xc) where xc.value('c[1]','varchar(100)')='regpropiedad'                )
       set @fincaregistral              =(select top 1 xc.value('v[1]','varchar(300)') from @x1.nodes('/root/p') as xt(xc) where xc.value('c[1]','varchar(100)')='fincaregistral'              )
@@ -678,11 +677,7 @@ begin try
                     end
                end
          end
-      if (isnull(@importemanual,'')='')
-         begin
-            set @validaciones+='<li>El dato de IMPORTE PRESUPUESTO debe estar informado</li>'
-         end
-
+         
       set @cpaso='Paso 005'
 
       if isnull(@idufir,'')=''
@@ -705,7 +700,7 @@ begin try
       if isnull(@fichero_transferencia,'')!=''
          begin
            ----------------------------
-           if @importetransferenciavalidado is null or @fechatransferenciavalidado is null or @conceptotransferenciavalidado is null
+           if @importetransferenciavalidado is null or @fechatransferenciavalidado is null
               begin
                  set @validaciones+='<li>Es necesario validar el justificante de transferencia</li>'
               end
@@ -726,20 +721,6 @@ begin try
                  begin catch
                        set @validaciones+='<li>Es necesario validar el importe del justificante de transferencia</li>'
                  end catch
-                   ------------------------------------------------------------------------------
-                 -- Validar el concepto de la transferencia si hay justificante de transferencia
-                 ------------------------------------------------------------------------------
-                 begin try
-                       declare @verificar_conceptotransferenciavalidado varchar(100)
-                       set @verificar_conceptotransferenciavalidado = @conceptotransferenciavalidado
-                       if ISNULL(@verificar_conceptotransferenciavalidado,'')=''
-                          begin
-                             set @validaciones+='<li>Es necesario validar el concepto del justificante de transferencia</li>'
-                          end
-                 end try
-                 begin catch
-                       set @validaciones+='<li>Es necesario validar el concepto del justificante de transferencia</li>'
-                 end catch
                  ------------------------------------------------------------------------------
                  -- Validar la fecha de la transferencia si hay justificante de transferencia
                  ------------------------------------------------------------------------------
@@ -753,7 +734,7 @@ begin try
                  ---------------------------- 
               end
          end
-    
+
       --------------------------------------
 
       declare @js varchar(max)=''
@@ -875,24 +856,24 @@ begin try
                  ,p.fichero_notasimple        =@fichero_notasimple
                  ,p.fichero_otrosficheros     =@fichero_otrosficheros
                  ,p.fichero_transferencia     =@fichero_transferencia
-                 ,p.importe_presupuesto_manual= @importe_presupuesto_manual
+                 -------------------------------------------------------------------------------
+                 ,p.importe_presupuesto_manual=case when isnull(@abririmportemanual,'0')='1' then @importe_presupuesto_manual else null end
                  -------------------------------------------------------------------------------
                  ,p.chk_conciliada_transferencia  =case when isnull(@fichero_transferencia,'')!='' then 1                                                 else null end  
                  ,p.fecha_conciliada_transferencia=case when isnull(@fichero_transferencia,'')!='' then getdate()                                         else null end
                  ,p.usuario_concilia_transferencia=case when isnull(@fichero_transferencia,'')!='' then us.descripcion                                    else null end
                  ,p.importe_concilia_transferencia=case when isnull(@fichero_transferencia,'')!='' then @importe_transferencia_validado                   else null end
-                 ,p.referencia_transferencia         =case when isnull(@fichero_transferencia,'')!='' then @conceptotransferenciavalidado                               else null end
                  ,p.fecha_pago_transferencia      =case when isnull(@fichero_transferencia,'')!='' then convert(datetime,@fechatransferenciavalidado,121) else null end
                  ,p.importe_pagado                =case when isnull(@fichero_transferencia,'')!='' then @importe_transferencia_validado                   else null end
                  ,p.chk_pagado_transferencia      =case when isnull(@fichero_transferencia,'')!='' then 1                                                 else null end
                  -------------------------------------------------------------------------------
-
             from TH_Presupuestos_Web p
             outer apply (select top 1 us.descripcion from usuarios us (nolock) where exists (select us.codigo intersect select convert(int,@fk_usuario)) ) us
             where p.codigo=@cod_TH_Presupuestos_Web
             set @afectados=@@rowcount
 
             -- alter table TH_Presupuestos_Web alter column emailcontactogestion varchar(300)
+            -- alter table TH_Presupuestos_Web add fichero_otrosficheros varchar(max)
 
             if @afectados=0
                begin
@@ -1073,6 +1054,7 @@ begin try
                    ----------------------------------------------------------------
                   
                    set @porcentaje_iva    =21.00
+                   
                    select @porcentaje_iva=iva.iva
                    from INE_CRUDO_MUNICIPIO i (nolock) 
                    inner join CORITEL.dbo.taoprovi p (nolock) on p.codprovi=i.CPRO
@@ -1083,7 +1065,7 @@ begin try
                       begin
                          set @porcentaje_iva    =21.00
                       end
-                  
+                 
                    ----------------------------------------------------------------------
                   
                    set @importe_pago_total=convert(decimal(19,2),@importe_pago_base*(1.00+(@porcentaje_iva/100.00)))
@@ -1100,17 +1082,19 @@ begin try
 
                    /*  -- Para reajustar el IVA
                     
-                   update w set 
-                          w.importe_pago_total=convert(decimal(19,2),w.importe_pago_base *(1.00+(iva.iva/100.00)))
-                         ,w.porcentaje_iva    =iva.iva
-                   from TH_Presupuestos_Web w
-                   inner join INE_CRUDO_MUNICIPIO i (nolock) on i.codigo=w.municipio
-                   inner join CORITEL.dbo.taoprovi  p (nolock) on p.codprovi=i.CPRO
-                   outer apply (select top 1 [iva]=i.porcenta from CORITEL.dbo.taoimpue i (nolock) where i.codimpue=p.codimpue) [iva]
-                   where w.codigo=8378
+                        update w set 
+                               w.importe_pago_total=convert(decimal(19,2),w.importe_pago_base *(1.00+(iva.iva/100.00)))
+                              ,w.porcentaje_iva    =iva.iva
+                        from TH_Presupuestos_Web w
+                        inner join INE_CRUDO_MUNICIPIO i (nolock) on i.codigo=w.municipio
+                        inner join CORITEL.dbo.taoprovi  p (nolock) on p.codprovi=i.CPRO
+                        outer apply (select top 1 [iva]=i.porcenta from CORITEL.dbo.taoimpue i (nolock) where i.codimpue=p.codimpue) [iva]
+                        where w.codigo=8378
 
                    */
 
+                   -----------------------------------------------------------------------
+                   -- Quitar la marca de presupuesto manual si coincide con la tarifa
                    -----------------------------------------------------------------------
                   
                    update w
@@ -1133,7 +1117,7 @@ begin try
                    -------------------------------------
                    -- Generar el PDF del presupuesto
                    -------------------------------------
-                  
+
                    if exists (select * 
                               from TH_Entidades e (nolock)
                               where e.codentid=@codentid 
@@ -1225,10 +1209,9 @@ begin try
                          
                          if @resultado_EMAIL!='OK'
                             begin
-                              set @resultado_EMAIL='Generación Email => '+@resultado_EMAIL
-                              raiserror(@resultado_EMAIL,16,1,0)
+                               set @resultado_EMAIL='Generación Email => '+@resultado_EMAIL
+                               raiserror(@resultado_EMAIL,16,1,0)
                             end
-                         
                          set @cpaso='Paso 011'
                       end
                    -------------------------------
