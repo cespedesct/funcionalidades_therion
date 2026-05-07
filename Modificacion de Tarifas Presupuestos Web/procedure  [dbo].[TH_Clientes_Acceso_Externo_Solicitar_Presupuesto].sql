@@ -1351,7 +1351,7 @@ begin try
                           +'<a class="btn primary"'
                                  +' onclick="if (PGFiles_transferencia.innerHTML=='''') {alert(''No existe Fichero. Incorporar Fichero previamente'');return} else {}
                                              var enc='' '+@peticion+' '';var p=enc; WEncriptHTML_General_Ext(p,1);"'                                
-                          +' >Validar Importe Transferencia</a>'
+                          +' >Validar Justificante de Transferencia</a>'
                      +'</p>'
                      +'<p style="margin-left:1vw;margin-top:0.1vh;display:inline-block;text-align:right;width:21vw;padding-right:0px">'
                           +'<a class="etiqueta ">Importe:</a>'
