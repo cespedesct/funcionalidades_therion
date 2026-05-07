@@ -68,13 +68,13 @@ begin try
       set @js+='codentid.innerHTML="'+@codentid+'";'
               +'codobjet.innerHTML="'+@tipoinmueble+'";'
               +'importemanual.style.color="black";'
-              +'if (abririmportemanual.checked) {importemanual.style.color="red"};' 
+              +'importemanual.style.color="red";' 
 
       if rtrim(ltrim(@tipoinmueble))=''
         begin
             set @js+='ivaaplicado.innerHTML="";'
                     +'totalimporte.innerHTML="";'
-                    +'if (!abririmportemanual.checked) {importemanual.value=""};' 
+                    +'importemanual.value="";' 
             select 'OKNORELOAD'+replace('[INIEVAL]'+isnull(@js,'')+'[FINEVAL]','[INIEVAL][FINEVAL]','')
             return
         end
@@ -87,7 +87,7 @@ begin try
         begin
             set @js+='ivaaplicado.innerHTML="";'
                     +'totalimporte.innerHTML="";'
-                    +'if (!abririmportemanual.checked) {importemanual.value=""};' 
+                    +'importemanual.value="";' 
             select 'OKNORELOAD'+replace('[INIEVAL]'+isnull(@js,'')+'[FINEVAL]','[INIEVAL][FINEVAL]','')
             return
         end
@@ -112,11 +112,13 @@ begin try
       set @cpaso='4'
 
       set @porcentaje_urgente=1.00
+      
       if exists (select rtrim(ltrim(@tramitacionurgente)) intersect select '1')
          begin   
             set @porcentaje_urgente=1.15
          end
-
+  
+     
       set @cpaso='5'
       --select [@tipoinmueble      ]=@tipoinmueble      
       --      ,[@superficie        ]=@superficie        
@@ -159,10 +161,18 @@ begin try
                            and exists (select @aplicar_tarifa intersect select 1)
                          ) [tar]
             outer apply (select top 1 [tarifa]=450.00) [tarbase]
-            select @importe_pago_base=450
-         end
 
-      select @importe_pago_base=@importe_pago_base*@porcentaje_urgente
+                if rtrim(ltrim(@importemanual))!=''
+                  begin   
+                     select @importe_pago_base=@importemanual
+                  end
+                  ELSE
+                  BEGIN
+                     select @importe_pago_base=450
+                  end
+         end
+          
+                     select @importe_pago_base=@importe_pago_base*@porcentaje_urgente
 
       /*
 
@@ -193,7 +203,7 @@ begin try
 
       set @js+='ivaaplicado.innerHTML ="";'
               +'totalimporte.innerHTML="";'
-              +'if (!abririmportemanual.checked) {importemanual.value=""};' 
+              +'importemanual.value="";' 
 
       if @porcentaje_iva is not null
          begin
@@ -202,7 +212,7 @@ begin try
          end
 
       set @js+=case when @importe_pago_base is not null then 
-                   'if (!abririmportemanual.checked) {importemanual.value="'+replace(format(@importe_pago_base,'0.00','de-DE'),',','.')+'"};' 
+                   'importemanual.value="'+replace(format(@importe_pago_base,'0.00','de-DE'),',','.')+'";' 
                    else '' 
                end
 
