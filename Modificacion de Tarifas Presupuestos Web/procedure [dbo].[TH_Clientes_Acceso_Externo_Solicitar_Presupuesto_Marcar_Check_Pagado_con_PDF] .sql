@@ -126,16 +126,16 @@ begin try
 
       if @extension='pdf'
          begin
-            set @obj_fichero='<embed style="display:inline-block;width:35vw;height:50vh" src="'+@url_fichero+'" type="application/'+@extension+'"/>'
+            set @obj_fichero='<embed style="display:inline-block;width:35vw;height:55vh" src="'+@url_fichero+'" type="application/'+@extension+'"/>'
          end
       else
         begin
-           set @obj_fichero='<img style="display:inline-block;width:35vw;height:50vh;object-fit:contain" src="'+@url_fichero+'" />'
+           set @obj_fichero='<img style="display:inline-block;width:35vw;height:55vh;object-fit:contain" src="'+@url_fichero+'" />'
         end
 
       if @obj_fichero is null 
          begin
-            set @obj_fichero='<div style="font-size:2vw;display:inline-block;width:35vw;height:50vh;">EL FICHERO DE TRANSFERENCIA NO HA SIDO POSIBLE MOSTRARLO</div>'
+            set @obj_fichero='<div style="font-size:2vw;display:inline-block;width:35vw;height:55vh;">EL FICHERO DE TRANSFERENCIA NO HA SIDO POSIBLE MOSTRARLO</div>'
          end
 
       ---------------------------------------------
@@ -155,12 +155,19 @@ begin try
       '
 
       declare @grabar_importe_pago varchar(max)=
-      '  if (importetransferencia.value=='''') {alert(''Informar del Importe de la transferencia'');return}
+      '  
+         var errores = [];
+     
+         if (importetransferencia.value=='''') errores.push(''Informar del Importe de la transferencia'');
+         if(conceptotransferencia.value=='''') errores.push(''Informar del Concepto de la transferencia'');
+         
+         if (errores.length > 0) { alert(errores.join(''\n'')); return }
+        
          var diferencia=importepagar.value-importetransferencia.value;
          var sSQL=''exec TH_Clientes_Acceso_Externo_Solicitar_Presupuesto_Marcar_Check_Pagado_con_importe'
                  +' @cod_TH_Presupuestos_Web='+format(@cod_TH_Presupuestos_Web,'0')+''
                  +',@usuario='+format(@usuario,'0')+''
-                 +',@importe=''+importetransferencia.value+'', @fechatranferencia=·''+fechatransferencia.value+''·'';
+                 +',@importe=''+importetransferencia.value+'',@conceptotransferencia=·''+conceptotransferencia.value+''·''+'', @fechatranferencia=·''+fechatransferencia.value+''·'';
          //alert(sSQL); 
          WSQL(sSQL); 
          '+@reponer_capa+'
@@ -174,7 +181,7 @@ begin try
 
       declare @html_panel_datos varchar(max)=''
       set @html_panel_datos+=
-      +'<div id="panelacciones" style="border:solid 0px #a00;height:100%;width:85%;overflow-y:auto;margin:auto;text-align:left;vertical-align:top">'
+      +'<div id="panelacciones" style="border:solid 0px #a00;height:100%;width:90%;overflow-y:auto;margin:auto;text-align:left;vertical-align:top">'
           +isnull(@obj_fichero,'')
           +'<div style="vertical-align:top;display:inline-block;width:10vw;height:45vh;border:solid 1px transparent;padding-left:1vw;">'
             +'<br><br><br>'+'<span style="padding-right:1vw;font-size:1vw;">Importe Presupuesto:</span>'
@@ -183,6 +190,8 @@ begin try
             
             +'<br><br>'+'<span style="padding-right:1vw;font-size:1vw;">Importe Transferencia:</span>'
             +'<br>'+'<input id="importetransferencia" style="display:inline-block;width:10vw;font-size:1.5vw;text-align:right;padding:10px;" type="number" step="0.01" />'
+             +'<br><br>'+'<span style="padding-right:1vw;font-size:1vw;">Concepto Transferencia:</span>'
+            +'<br>'+'<textarea id="conceptotransferencia" style="display:inline-block;width:10vw;min-width:10vw;min-height:10vh;font-size:0.75vw;text-align:right;padding:10px;" type="text"></textarea>'
             +'<br><br>'+'<span style="padding-right:1vw;font-size:1vw;">Fecha Transferencia:</span>'
             +'<br>'+'<input id="fechatransferencia" style="display:inline-block;width:10vw;font-size:1vw;text-align:right;padding:10px;" type="date" value="'+isnull(@fecha_transferencia,'')+'"/>'
 
