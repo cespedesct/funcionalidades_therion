@@ -42,6 +42,7 @@ AS
              ,@mismocontactogestion    varchar(3)
              ,@otrocontactogestion     varchar(3)
              ,@fichero_dni             varchar(max)
+             ,@editar_dni             varchar(max)
              ,@fichero_justificante    varchar(max)
              ,@fichero_notasimple      varchar(max)
              ,@fichero_transferencia   varchar(max)
@@ -161,6 +162,27 @@ AS
                                                 +'>'
                                                else ''
                                           end
+
+                    ,@editar_dni         =case when e.estinfor not in ('X','4','5','6','F')
+                                             then 
+                                             '<img class="click aumenta" style="padding-left:0px;vertical-align:middle;width:1vw;height:auto" src="img/ico_edicionnota.png"'
+                                             +' title="Editar numero de DNI del Solicitante"'   
+                                              +'onclick="var l =''{confirmacion|Editar DNI del Solicitante del Encargo Nro. '+isnull(w.numinfor,'')+'|||}'';'
+                                   
+                                            +' l+=''{texto||DNI|'+isnull('','')+'#obligatorio#|}'';'
+                                            +' var p=''WSQL(`exec TH_Clientes_Acceso_Externo_Solicitar_Presupuesto_Editar_DNI_Solicitante @cod_TH_Presupuestos_Web=·'+w.codigo_presupuesto+'·,@dni_actualizado=·#parametro_value_1#·,@usuario='+format(@usuario,'0')+'`)'';'
+                                         +'Pide_Parametros(l,p);'
+                                         +'"'
+                                             +' >' 
+                                             else ''
+                                             end
+                                             +case when isnull(w.fichero_dni,'')!='' then
+                                                  '<img class="click aumenta" style="padding-left:0px;vertical-align:middle;width:1vw;height:auto" src="img/ico_ico_view_files.png"' 
+                                                       +' title="Acceso al documento DNI"'          
+                                                       +' onclick="Show_Lista_Ficheros_Ristra_Solo_Lectura('''+isnull(w.fichero_dni,'')+''',''TH_Presupuestos_Web'',''fichero_dni'','+format(w.codigo,'0')+')"'
+                                                  +'>'
+                                                  else ''
+                                             end
                    ,@fichero_justificante=case when e.estinfor not in ('X','4','5','6','F') then
                                                    '<img class="click aumenta" style="padding-left:0px;vertical-align:middle;width:1vw;height:auto" src="img/ico_agregar_documento.png"'
                                                   +' title="Agregar Justificante AUTORIZACION forma Manual"'
@@ -407,6 +429,7 @@ AS
                +case when @usuario=0 then '' else 
                     '<hr style="width:100%;border:solid 0px;border-top:solid 1px transparent;padding:0px">'
                     +isnull(@fichero_dni,'') 
+                    +isnull(@editar_dni,'')
                 end
             +'</td>'
             ----------------------------------------
