@@ -190,7 +190,7 @@ begin try
 
       set @js+='ivaaplicado.innerHTML ="";'
               +'totalimporte.innerHTML="";'
-            --   +'importemanual.value="";' 
+              +'importemanual.value="";' 
 
       if @porcentaje_iva is not null
          begin
@@ -201,10 +201,10 @@ begin try
          begin
               set @js+='totalimporte.innerHTML="Total: <b>'+format(@importe_pago_total,'#,0.00','de-DE')+' €</b>";'
          end
-      -- set @js+=case when @importe_pago_base is not null then 
-      --              'importemanual.value="'+replace(format(@importe_pago_base,'0.00','de-DE'),',','.')+'";' 
-      --              else '' 
-      --          end
+      set @js+=case when @importe_pago_base is not null then 
+                   'importemanual.value="'+replace(format(@importe_pago_base,'0.00','de-DE'),',','.')+'";' 
+                   else '' 
+               end
 
       ---------------------------
       select 'OKNORELOAD'
