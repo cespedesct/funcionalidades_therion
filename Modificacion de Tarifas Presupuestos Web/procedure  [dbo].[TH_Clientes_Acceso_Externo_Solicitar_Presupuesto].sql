@@ -1362,7 +1362,7 @@ begin try
                                 -----------------------
                                 -- Agregado por Fabrizio
                                 -----------------------
-                          +'<br><a class="etiqueta ">Concepto:</a>'
+                          +'<br><a class="etiqueta ">Concepto Transferencia:</a>'
                           +'<textarea id="conceptotransferenciavalidado" style="min-width:280px; min-height:100px;display:inline-block;width:4vw;font-size:0.70vw;text-align:right;" type="text" readonly style="text-align:right;width:5vw"></textarea>' 
                          
                      +'</p>'
