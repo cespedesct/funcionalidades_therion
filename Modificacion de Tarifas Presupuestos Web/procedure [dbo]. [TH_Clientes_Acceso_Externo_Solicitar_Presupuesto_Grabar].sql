@@ -457,9 +457,13 @@ begin try
                begin
                   set @validaciones+='<li>El dato de APELLIDOS del solicitante debe estar informado</li>'
                end
-            if isnull(@dnisolicitante,'')=''
+         if isnull(@dnisolicitante,'')=''
                begin
-                  set @validaciones+='<li>El dato de DNI del solicitante debe estar informado</li>'
+               if(@codentid!='PR1' AND @codentid!='PR2')  
+                  begin
+                     set @validaciones+='<li>El dato de DNI del solicitante o el fichero con el DNI deben estar informados</li>'
+                  end
+
                end
              else
                begin
