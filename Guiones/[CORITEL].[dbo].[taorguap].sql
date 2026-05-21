@@ -1,0 +1,6 @@
+SELECT TOP (1000) [codguion]
+      ,[posapart]
+      ,[codapart]
+      ,[saltopag]
+      ,[ROWID]
+  FROM [CORITEL].[dbo].[taorguap]
