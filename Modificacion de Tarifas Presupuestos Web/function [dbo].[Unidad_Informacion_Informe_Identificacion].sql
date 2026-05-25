@@ -814,7 +814,7 @@ as
      +case when @acc_provision=1 then
             +case when exists (select pw.chk_conciliada_transferencia intersect select 1) or isnull(n.importe_provision_en_banco,0)!=0 then '' 
                   else '<img class="aumenta" style="padding-left:0.5vw;vertical-align:middle;cursor:pointer;width:1.3vw;height:auto;" src="img\informar_provision.png" title="Informar del Importe de Provisión "'
-                          +' onclick="Pide_Parametros( ''{numero|Provisión Informe '+@numinfor+'|Importe Provisión|'+isnull(format(a.importe_provision,'#.00','de-DE'),'')+'#obligatorio#}{texto||Concepto Transferencia|'+isnull(a.ordenante_provision,'')+'}'' ,''WSQL(··TH_Informes_Infomar_Provision @numinfor=·'+@numinfor+'·, @importe=·#parametro_value_1#·, @ordenante=·#parametro_value_2#·, @usuario='+convert(varchar,@usuario)+' ··)'');"'
+                          +' onclick="Pide_Parametros( ''{numero|Provisión Informe '+@numinfor+'|Importe Provisión|'+isnull(format(a.importe_provision,'#.00','de-DE'),'')+'#obligatorio#}{texto||Concepto Transferencia|'+isnull(a.ordenante_provision,'')+'#obligatorio#}'' ,''WSQL(··TH_Informes_Infomar_Provision @numinfor=·'+@numinfor+'·, @importe=·#parametro_value_1#·, @ordenante=·#parametro_value_2#·, @usuario='+convert(varchar,@usuario)+' ··)'');"'
 				                   +' >'
              end
             +case when isnull(n.importe_provision_en_banco,0)!=0 then 
