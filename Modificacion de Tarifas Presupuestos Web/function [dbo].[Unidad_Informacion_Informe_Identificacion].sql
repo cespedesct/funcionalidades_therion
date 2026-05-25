@@ -364,19 +364,6 @@ as
                 set @usuario_gestor_encargado=case when charindex('[ACC005]', @lista_PE)>0 then 1 else 0 end
 				         end
 
-				     -- set @acc_geotest                =dbo.f_SISTEMA_Accesos_Especiales('ACC005', @usuario)
-				     -- set @acc_blockchain             =dbo.f_SISTEMA_Accesos_Especiales('ACC011', @usuario)
-				     -- set @acc_minutado_actualizacion =dbo.f_SISTEMA_Accesos_Especiales('ACC014', @usuario)
-         -- set @acc_ver_prioridad          =dbo.f_SISTEMA_Accesos_Especiales('ACC017', @usuario)
-         -- set @acc_provision              =dbo.f_SISTEMA_Accesos_Especiales('30'    , @usuario)
-         -- set @acc_enviar_email_supervisor=dbo.f_SISTEMA_Accesos_Especiales('ACC018', @usuario)
-         -- set @acc_rechazar_gestion       =dbo.f_SISTEMA_Accesos_Especiales('27'    , @usuario)
-         -- set @acc_vaciar_estructura      =dbo.f_SISTEMA_Accesos_Especiales('ACC022', @usuario)
-         -- set @acc_version_supersit       =dbo.f_SISTEMA_Accesos_Especiales('28'    , @usuario)
-         -- set @acc_forzar_minutacion      =dbo.f_SISTEMA_Accesos_Especiales('32'    , @usuario)
-
-         --select * from SISTEMA_Accesos_Especiales
-
 				     set @acc_geotest                =case when charindex('[ACC005]', @lista_PE)>0 then 1 else 0 end
 				     set @acc_blockchain             =case when charindex('[ACC011]', @lista_PE)>0 then 1 else 0 end
 				     set @acc_minutado_actualizacion =case when charindex('[ACC014]', @lista_PE)>0 then 1 else 0 end
@@ -413,108 +400,115 @@ as
               -------------------------------------------------------------------------------- 
               -- Informe
               ------------------------------------------------------------------------------
-              '<span style="display:inline-block;width:5vw;cursor:pointer;color:#BC141A;font-size:1.1vw;font-weight:bold;vertical-align:middle;" '
+              '<span style="display:inline-block;width:5vw;cursor:pointer;color:#BC141A;font-size:1.2vw;font-weight:bold;vertical-align:middle;" '
 								     +' onclick="WHTML_General(''TH_Informes_HTML_Mostrar_Ficha ·'+@numinfor+'·,'+format(@usuario,'0')+''',1);"'
 								     +' title="Datos Administrativos" >'+@numinfor+'</span>'
              +case when @codclase='700' 
                    then '<img class="imginforme" style="padding-left:0.5vw;" src="img\ico_informe_cee.png" title="Informe de Certificación Energética" >'
 						             else ''
 					         end
-             +'<span style="display:inline-block;width:5vw;font-size:0.65vw;font-weight:bold;vertical-align:middle;" title="Datos Administrativos" >'+format(@fecalta,'dd/MM/yy HH:mm')+'</span>'
+             +'<span style="display:inline-block;width:3vw;font-size:0.65vw;font-weight:bold;vertical-align:middle;text-align:center" title="Datos Administrativos" >'+format(@fecalta,'dd/MM/yy<br>HH:mm')+'</span>'
               -------------------------------------------------------------------------------- 
               -- Código Interno (Apagado)
               ------------------------------------------------------------------------------
              +case when 1=1 then '' else
                    '<table class="subtabla"  title="Fecha de Alta/Codigo Interno">'
-                       --+'<tr><td>'+isnull('('+format(@fecalta,'dd/MM/yyyy HH:mm:ss')+')','')+'</td></tr>'
                          +'<tr><td>'+isnull('('+format(n.codigo,'#,0','de-DE')+')', '')+'</td></tr>'
                   +'</table>'
              end
-              -------------------------------------------------------------------------------- 
+              ----------------
               -- Ico Entidad
-              ------------------------------------------------------------------------------
+              ----------------
              +case when 1=2 then '' else
-                   '<table class="subtabla" style="width:2vw" >'
-                         +'<tr><td style="text-align:center;">'+isnull('<img style="vertical-align:middle;width:95%;" '+@imagen_corto+' >','')+'</td></tr>'
-                         +'<tr><td style="text-align:center;color:#977;font-size:130%;font-weight:bold"><span title="Corto">'+isnull(''+@codentid+'', '')+'</span></td></tr>'
+                   '<table class="subtabla" style="table-layout:fixed;width:28vw;border:solid 0px #000" >'
+                         +'<tr>'
+                             +'<td style="text-align:center;width:17%;height:4vh;border:solid 0px #000">'
+                                  +isnull('<img style="vertical-align:middle;width:100%;height:100%;object-fit:contain; display:block;" '+@imagen_corto+' >','')
+                             +'</td>'
+                             +'<td style="text-align:center;width:6%;border:solid 0px #000">'
+                                +'<span style="vertical-align:middle;text-align:left;color:#977;font-size:0.85vw;font-weight:bold;" title="Corto">'+isnull(''+@codentid+'', '')+'</span>'
+                             +'</td>'
+                             ----------------------
+                             -- Direccion Completa
+                             ----------------------
+                             +'<td style="text-align:center;width:6%;border:solid 0px #000">
+                                <img class="imginforme" src="img\ico_th_informe_ubicacion.png" style="cursor:default;vertical-align:middle;padding-left:4px;" title="'+isnull(dbo.TH_Informes_Direccion_Completa(@numinfor),'')+'">'
+                             +'</td>'
+                             ---------
+                             -- Covid
+                             ---------
+                             +'<td style="text-align:center;width:6%;border:solid 0px #000">'
+                                  +case when e.estinfor in ('3','4','5','6','F') and e.fecsuper>=CONVERT(datetime,'01/08/2021',103) and not exists( select * from EXPLOTACION.dbo.InclusionParrafoCovid (nolock) where numinfor=e.numinfor) then
+                                   		    '<img class="aumenta click imginforme" style="padding-left:4px;vertical-align:middle;width:1.5vw;height:auto" src="img\ico_informe_concovid.png" title="Permitir Generar Documento informe"'  
+				                                    +' onclick=" var p='''';'
+				                                              +' p+=''{confirmacion|Esta accion permite generar informe pese a que tenga parrafo covid '+@numinfor+'|||'';'
+				                                              +' var e=''WSQL(··MarcarDesmarcarInformeSalidaConParrafocovid 0, ·'+@numinfor+  '·' + ',' +'·' + e.estinfor + '·'+ ',·' + CONVERT(varchar,e.fecsuper,120) + '·'  + ' ··)''; '
+				                                              +' Pide_Parametros(p,e);'
+				                                              +'"'
+					                                     +'>'
+									                               else '' 
+                                   end
+                             +'</td>'
+                             ----------------
+                             -- Párrafo Covid
+                             ----------------
+                             +'<td style="text-align:center;width:6%;border:solid 0px #000">'
+                                   +case when e.estinfor in ('3','4','5','6','F') and e.fecsuper>=CONVERT(datetime,'01/08/2021',103) and exists (select * from EXPLOTACION.dbo.InclusionParrafoCovid (nolock) where numinfor =e.numinfor) then   
+		                                             '<img class="aumenta click imginforme" src="img\ico_informe_sincovid.png" title="Cancelar permiso Generar Documento informe"'  
+				                                          +' onclick=" var p='''';'
+				                                                    +' p+=''{confirmacion|Esta accion cancelará el permiso para que se genere el informe con parrafo covid '+@numinfor+'|||'';'
+				                                                    +' var e=''WSQL(··MarcarDesmarcarInformeSalidaConParrafocovid 1, ·'+@numinfor+  '·' + ',' +'·' + e.estinfor + '·'+ ',·' + CONVERT(varchar,e.fecsuper,120) + '·'  + ' ··)''; '
+				                                                    +' Pide_Parametros(p,e);'
+				                                                    +'"'
+					                                           +'>'
+									                               else '' 
+                                    end
+                             +'</td>'
+                             ----------------
+                             -- Ubicacion
+                             ----------------
+                             +'<td style="text-align:center;width:auto;border:solid 0px #000">'
+                                  +'<span style="color:#1F618D;vertical-align:middle;font-size:0.55vw;" title="Localidad Ubicación">'
+                                     +isnull(ltrim(rtrim(@deslocal)), '')
+                                     +isnull('<br>('+@desprovi+')', '')
+                                  +'</span>'
+                             +'</td>'
+                             ---------------------------
+                             -- Geolocalizacion Tasador
+                             ---------------------------
+                             +'<td style="text-align:center;width:17%;border:solid 0px #000">'
+                                  +case when @estinfor not in ('3','4','5','6','F') then ''
+                                        when @latitud is not null 
+                                        then  '<img class="aumenta click imginforme" src="img\ico_gpsmorado.png" style="width:32px;height:auto;" '
+                                                      +' title="Geolocalizado por tasador. Accede al Mapa para ver Geoposición"'
+                                                      +' onclick="Mapa('''+convert(varchar(100),@latitud_decimal)+'###'+convert(varchar(100),@longitud_decimal)+''','''','+ltrim(str(n.codigo))+'); ">'
+                                             +'<span style="display:inline-block;width:4.5vw;vertical-align:middle;border:solid 0px black;word-break:break-all;font-size:0.45vw;" title="GPS Tasador">'
+                                               +isnull(convert(varchar(100),@latitud_decimal ),'')+'<br>'+isnull(convert(varchar(100),@longitud_decimal),'')
+                                             +'</span>'
+                                       else   
+                                             '<span style="color:red;vertical-align:middle;word-break:break-all;font-size:0.45vw;" >No GEOLOCALIZADO por TASADOR</span>'
+                                   end
+                             +'</td>'
+                             -------------------------
+                             -- Geolocalizacion Nueva
+                             -------------------------
+                             +'<td style="text-align:center;width:6%;border:solid 0px #000">'
+                                +'<img class="aumenta click imginforme" src="img\ico_gpsverde.png"'
+                                          +' style="width:32px;height:auto;"'
+                                          +' title="'+case when @latitud is not null then 'Geolocalizado, acceso nueva geolocalización' else 'SIN GEOLOCALIZAR. Acceso a Geolocalización ' end+'"'
+                                          +  case when n.latitud is not null 
+                                                  then ' onclick="Mapa('''+convert(varchar(100),n.latitud)+'###'+convert(varchar(100),n.longitud)+''',''TH_Informes###'+isnull(@direccion_informe,'')+''','+ltrim(str(n.codigo))+')"'
+                                                  else ' onclick="Mapa('''+isnull(@direccion_informe,'')+''',''TH_Informes'''+','+ltrim(str(n.codigo))+')"'
+                                             end
+                                 +'>'
+                             +'</td>'
+                             ----------------
+                         +'</tr>'
                   +'</table>'
-             end
-              -------------------------------------------------------------------------------- 
-              -- Direccion Completa
-              ------------------------------------------------------------------------------
-             +case when 1=2 then '' else 
-				               '<img class="imginforme" src="img\ico_th_informe_ubicacion.png" style="cursor:default" title="'+isnull(dbo.TH_Informes_Direccion_Completa(@numinfor),'')+'" >'
-              end
-              -------------------------------------------------------------------------------- 
-              -- Generacion con Covid
-              ------------------------------------------------------------------------------
-	            +case when 1=2 then '' else 
-                   case when e.estinfor in ('3','4','5','6','F') and e.fecsuper>=CONVERT(datetime,'01/08/2021',103) and not exists( select * from EXPLOTACION.dbo.InclusionParrafoCovid (nolock) where numinfor=e.numinfor) then
-                   		    '<img class="aumenta click imginforme" src="img\ico_informe_concovid.png" title="Permitir Generar Documento informe"'  
-				                    +' onclick=" var p='''';'
-				                              +' p+=''{confirmacion|Esta accion permite generar informe pese a que tenga parrafo covid '+@numinfor+'|||'';'
-				                              +' var e=''WSQL(··MarcarDesmarcarInformeSalidaConParrafocovid 0, ·'+@numinfor+  '·' + ',' +'·' + e.estinfor + '·'+ ',·' + CONVERT(varchar,e.fecsuper,120) + '·'  + ' ··)''; '
-				                              +' Pide_Parametros(p,e);'
-				                              +'"'
-					                     +'>'
-									               else '' 
-                   end
-             end
-              -------------------------------------------------------------------------------- 
-              -- Párrafo Covid
-              ------------------------------------------------------------------------------
-        		   +case when 1=2 then '' else 
-                   case when e.estinfor in ('3','4','5','6','F') and e.fecsuper>=CONVERT(datetime,'01/08/2021',103) and exists (select * from EXPLOTACION.dbo.InclusionParrafoCovid (nolock) where numinfor =e.numinfor) then   
-		                            '<img class="aumenta click imginforme" src="img\ico_informe_sincovid.png" title="Cancelar permiso Generar Documento informe"'  
-				                         +' onclick=" var p='''';'
-				                                   +' p+=''{confirmacion|Esta accion cancelará el permiso para que se genere el informe con parrafo covid '+@numinfor+'|||'';'
-				                                   +' var e=''WSQL(··MarcarDesmarcarInformeSalidaConParrafocovid 1, ·'+@numinfor+  '·' + ',' +'·' + e.estinfor + '·'+ ',·' + CONVERT(varchar,e.fecsuper,120) + '·'  + ' ··)''; '
-				                                   +' Pide_Parametros(p,e);'
-				                                   +'"'
-					                          +'>'
-									              else '' 
-                   end
-              end
-              -------------------------------------------------------------------------------- 
-              -- Ubicacion
-              ------------------------------------------------------------------------------
-             +case when 1=2 then '' else 
-                  ---------------------------------------------------------------
-                  '<span style="display:inline-block;color:#1F618D;padding-left:3px;padding-right:3 px;width:5vw;vertical-align:middle;font-size:0.55vw;" title="Localidad Ubicación">'+(isnull(ltrim(rtrim(@deslocal)), ''))+'</span>'
-                 +'<span style="display:inline-block;color:#F161D8;width:4vw;vertical-align:middle;font-size:0.55vw;" title="Provincia Ubicación">'+(isnull(@desprovi, ''))+'</span>'
-              end
-              -------------------------------------------------------------------------------- 
-              -- Geolocalizacion Tasador
-              ------------------------------------------------------------------------------
-              +case when 1=2 then '' else
-                    case when @estinfor not in ('3','4','5','6','F') then ''
-                         when @latitud is not null 
-                         then  '<img class="aumenta click imginforme" src="img\ico_gpsmorado.png" style="width:32px;height:auto;" '
-                                       +' title="Geolocalizado por tasador. Accede al Mapa para ver Geoposición"'
-                                       +' onclick="Mapa('''+convert(varchar(100),@latitud_decimal)+'###'+convert(varchar(100),@longitud_decimal)+''','''','+ltrim(str(n.codigo))+'); ">'
-                              +'<span style="display:inline-block;width:4.5vw;vertical-align:middle;border:solid 0px black;word-break:break-all;font-size:0.45vw;" title="GPS Tasador">'
-                                +isnull(convert(varchar(100),@latitud_decimal ),'')+'<br>'+isnull(convert(varchar(100),@longitud_decimal),'')
-                              +'</span>'
-                        else   
-                              '<span style="display:inline-block;width:4.5vw;color:red;vertical-align:middle;word-break:break-all;font-size:0.45vw;" >No GEOLOCALIZADO por TASADOR</span>'
-                    end
                end
-              -------------------------------------------------------------------------------- 
-              -- Geolocalizacion Nueva
-              -------------------------------------------------------------------------------- 
-              +case when 1=2 then '' else
-                    '<img class="aumenta click imginforme" src="img\ico_gpsverde.png"'
-                             +' style="width:32px;height:auto;"'
-                             +' title="'+case when n.latitud is not null then 'Geolocalizado, acceso nueva geolocalización' else 'SIN GEOLOCALIZAR. Acceso a Geolocalización ' end+'"'
-                             +  case when n.latitud is not null 
-                                     then ' onclick="Mapa('''+convert(varchar(100),n.latitud)+'###'+convert(varchar(100),n.longitud)+''',''TH_Informes###'+isnull(@direccion_informe,'')+''','+ltrim(str(n.codigo))+')"'
-                                     else ' onclick="Mapa('''+isnull(@direccion_informe,'')+''',''TH_Informes'''+','+ltrim(str(n.codigo))+')"'
-                                end
-                    +'>'
-               end
-              -------------------------------------------------------------------------------- 
+              -------------
               -- Prioridad
-              -------------------------------------------------------------------------------- 
+              -------------
               +case when 1=2 then '' else 
                     +'<br>'
                     +case when @estinfor in ('0','1','2','3') then
