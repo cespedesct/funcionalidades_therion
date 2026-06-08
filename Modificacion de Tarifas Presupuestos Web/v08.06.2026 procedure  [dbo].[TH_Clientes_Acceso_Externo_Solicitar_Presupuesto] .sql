@@ -1364,6 +1364,7 @@ begin try
                                 -----------------------
                           +'<br><a class="etiqueta ">Concepto Transferencia:</a>'
                           +'<textarea id="conceptotransferenciavalidado" style="min-width:280px; min-height:100px;display:inline-block;width:4vw;font-size:0.70vw;text-align:right;" type="text" readonly style="text-align:right;width:5vw"></textarea>' 
+                          +'<div style="font-size:0.65vw;color:#a00;margin-top:0.3vh;"><b>Nota: Si el justificante incluye un concepto, es obligatorio escribir aquí el mismo concepto.</b></div>'
                          
                      +'</p>'
               +'</div>'
