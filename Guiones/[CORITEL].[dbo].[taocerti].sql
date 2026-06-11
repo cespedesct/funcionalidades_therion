@@ -1,0 +1,7 @@
+SELECT TOP (1000) [codguion]
+      ,[codentid]
+      ,[plantilla]
+      ,[plantilla_des]
+      ,[plantilla_ano]
+      ,[rowid]
+  FROM [CORITEL].[dbo].[taocerti]

@@ -1,0 +1,6 @@
+SELECT TOP (1000) [codeleme]
+      ,[deseleme]
+      ,[plantill]
+      ,[defeleme]
+      ,[tipeleme]
+  FROM [CORITEL].[dbo].[taoeleme]
